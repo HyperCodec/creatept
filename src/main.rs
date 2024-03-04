@@ -1,4 +1,6 @@
-use bevy::core_pipeline::bloom::BloomSettings;
+mod player;
+mod environment;
+
 use bevy::prelude::*;
 use bevy_xpbd_3d::prelude::*;
 
@@ -13,20 +15,7 @@ fn main() {
                 ..default()
             }),
             PhysicsPlugins::default(),
+            player::PlayerPlugin,
         ))
-        .add_systems(Startup, setup)
         .run();
-}
-
-fn setup(mut commands: Commands) {
-    commands.spawn((
-        Camera3dBundle {
-            camera: Camera {
-                hdr: true,
-                ..default()
-            },
-            ..default()
-        },
-         BloomSettings::NATURAL
-    ));
 }
