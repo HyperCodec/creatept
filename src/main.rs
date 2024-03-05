@@ -15,7 +15,7 @@ fn main() {
                 ..default()
             }),
             PhysicsPlugins::default(),
-            player::PlayerPlugin,
+            player::PlayerPlugins,
         ))
         .run();
 }
