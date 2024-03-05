@@ -18,9 +18,10 @@ impl Plugin for DebugPlugin {
     fn build(&self, app: &mut App) {
         app
             .init_resource::<DebugEnabled>()
-            .add_systems(Update, 
-                toggle_debug
-                .run_if(|inputs: Res<ButtonInput<KeyCode>>| inputs.just_pressed(KeyCode::F7)));
+            .add_systems(Update, (
+                    toggle_debug.run_if(|inputs: Res<ButtonInput<KeyCode>>| inputs.just_pressed(KeyCode::F7)),
+                    inspector_ui.run_if(|debug_mode: Res<DebugEnabled>| debug_mode.0)
+                ));
     }
 }
 
@@ -34,12 +35,8 @@ fn toggle_debug(
 }
 
 fn inspector_ui(
-    debug_mode: Res<DebugEnabled>,
     world: &mut World,
 ) {
-    if !debug_mode.0 {
-        return;
-    }
 
     let Ok(egui_context) = world
         .query_filtered::<&mut EguiContext, With<PrimaryWindow>>()

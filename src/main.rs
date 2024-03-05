@@ -1,6 +1,7 @@
 mod player;
 mod environment;
 mod debug;
+mod ui;
 
 use bevy::prelude::*;
 use bevy_xpbd_3d::prelude::*;
@@ -19,6 +20,7 @@ fn main() {
             player::PlayerPlugins,
             environment::EnvironmentPlugins,
             bevy_egui::EguiPlugin,
+            ui::UIPlugins,
             debug::DebugPlugins,
         ))
         .run();
