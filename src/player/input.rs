@@ -7,16 +7,18 @@ pub struct InputPlugin;
 
 impl Plugin for InputPlugin {
     fn build(&self, app: &mut App) {
-        app.add_systems(Update, (
-            handle_w.run_if(|input: Res<ButtonInput<KeyCode>>| input.pressed(KeyCode::KeyW)),
-            handle_s.run_if(|input: Res<ButtonInput<KeyCode>>| input.pressed(KeyCode::KeyS)),
-            handle_a.run_if(|input: Res<ButtonInput<KeyCode>>| input.pressed(KeyCode::KeyA)),
-            handle_d.run_if(|input: Res<ButtonInput<KeyCode>>| input.pressed(KeyCode::KeyD)),
-            handle_space.run_if(|input: Res<ButtonInput<KeyCode>>| input.pressed(KeyCode::Space)),
-            mouse_camera_movement,
-            cursor_grab.run_if(|mouse_button: Res<ButtonInput<MouseButton>>| mouse_button.pressed(MouseButton::Left)),
-            cursor_ungrab.run_if(|inputs: Res<ButtonInput<KeyCode>>| inputs.just_pressed(KeyCode::Escape)),
-        ));
+        app
+            .init_resource::<CursorGrabbed>()
+            .add_systems(Update, (
+                handle_w.run_if(|input: Res<ButtonInput<KeyCode>>| input.pressed(KeyCode::KeyW)),
+                handle_s.run_if(|input: Res<ButtonInput<KeyCode>>| input.pressed(KeyCode::KeyS)),
+                handle_a.run_if(|input: Res<ButtonInput<KeyCode>>| input.pressed(KeyCode::KeyA)),
+                handle_d.run_if(|input: Res<ButtonInput<KeyCode>>| input.pressed(KeyCode::KeyD)),
+                handle_space.run_if(|input: Res<ButtonInput<KeyCode>>| input.pressed(KeyCode::Space)),
+                mouse_camera_movement.run_if(|grabbed: Res<CursorGrabbed>| grabbed.0),
+                cursor_grab.run_if(|mouse_button: Res<ButtonInput<MouseButton>>| mouse_button.pressed(MouseButton::Left)),
+                cursor_ungrab.run_if(|inputs: Res<ButtonInput<KeyCode>>| inputs.just_pressed(KeyCode::Escape)),
+            ));
     }
 }
 
@@ -77,20 +79,29 @@ fn mouse_camera_movement(
     }
 }
 
+#[derive(Resource, Default)]
+pub struct CursorGrabbed(pub bool);
+
 fn cursor_grab(
     mut q_windows: Query<&mut Window, With<PrimaryWindow>>,
+    mut grabbed: ResMut<CursorGrabbed>,
 ) {
     let mut primary_window = q_windows.single_mut();
 
     primary_window.cursor.grab_mode = CursorGrabMode::Locked;
     primary_window.cursor.visible = false;
+
+    grabbed.0 = true;
 }
 
 fn cursor_ungrab(
     mut q_windows: Query<&mut Window, With<PrimaryWindow>>,
+    mut grabbed: ResMut<CursorGrabbed>,
 ) {
     let mut primary_window = q_windows.single_mut();
 
     primary_window.cursor.grab_mode = CursorGrabMode::None;
     primary_window.cursor.visible = true;
+
+    grabbed.0 = false;
 }
