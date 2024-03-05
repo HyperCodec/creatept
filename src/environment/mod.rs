@@ -1,4 +1,5 @@
 mod setup;
+pub mod spawn_cycle;
 
 use bevy::{app::PluginGroupBuilder, prelude::*, time::Stopwatch};
 
