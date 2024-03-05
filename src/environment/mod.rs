@@ -8,6 +8,7 @@ impl PluginGroup for EnvironmentPlugins {
     fn build(self) -> PluginGroupBuilder {
         PluginGroupBuilder::start::<Self>()
             .add(setup::EnvironmentSetupPlugin)
+            .add(EnvironmentBasePlugin)
     }
 }
 
