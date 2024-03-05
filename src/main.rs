@@ -1,5 +1,6 @@
 mod player;
 mod environment;
+mod debug;
 
 use bevy::prelude::*;
 use bevy_xpbd_3d::prelude::*;
@@ -17,6 +18,8 @@ fn main() {
             PhysicsPlugins::default(),
             player::PlayerPlugins,
             environment::EnvironmentPlugins,
+            bevy_egui::EguiPlugin,
+            debug::DebugPlugins,
         ))
         .run();
 }
