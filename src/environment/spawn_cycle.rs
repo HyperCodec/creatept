@@ -11,8 +11,10 @@ impl Plugin for SpawnCyclePlugin {
     fn build(&self, app: &mut App) {
         app
             .add_event::<EndLevelEvent>()
-            .add_systems(Update, 
-                end_level.run_if(|ev: EventReader<EndLevelEvent>| !ev.is_empty()));
+            .add_systems(Update, (
+                handle_collision_goal.before(end_level),
+                end_level.run_if(|ev: EventReader<EndLevelEvent>| !ev.is_empty())
+            ));
     }
 }
 
@@ -42,8 +44,10 @@ fn handle_collision_goal(
 pub struct EndLevelEvent;
 
 fn end_level(
+    mut ev: EventReader<EndLevelEvent>,
     mut etime: ResMut<EnvironmentTime>,
 ) {
+    ev.read();
     etime.is_ticking = false;
 
     // TODO other level end stuff
