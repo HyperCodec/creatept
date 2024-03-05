@@ -14,8 +14,9 @@ fn display_timer(
     etime: Res<EnvironmentTime>,
     mut contexts: EguiContexts,
 ) {
+    let el = etime.time.elapsed();
+
     egui::Window::new("Timer").show(contexts.ctx_mut(), |ui| {
-        // TODO actual time formatting
-        ui.label(format!("Time: {:#?}", etime.time.elapsed()));
+        ui.label(format!("Time: {}:{}", el.as_secs() / 60, el.as_secs_f32() % 60.));
     });
 }

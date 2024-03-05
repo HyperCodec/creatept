@@ -17,8 +17,10 @@ fn main() {
                 ..default()
             }),
             PhysicsPlugins::default(),
+
             player::PlayerPlugins,
             environment::EnvironmentPlugins,
+
             bevy_egui::EguiPlugin,
             ui::UIPlugins,
             debug::DebugPlugins,
