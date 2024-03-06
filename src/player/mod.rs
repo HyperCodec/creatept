@@ -15,3 +15,6 @@ impl PluginGroup for PlayerPlugins {
 
 #[derive(Component)]
 pub struct Player;
+
+#[derive(Component)]
+pub struct PlayerCamera;

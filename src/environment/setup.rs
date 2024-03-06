@@ -19,6 +19,7 @@ fn setup_environment(
         PbrBundle {
             mesh: meshes.add(Mesh::from(Plane3d::new(Vec3::Y))),
             material: materials.add(StandardMaterial::from(Color::GREEN)),
+            transform: Transform::from_xyz(0., -1., 0.),
             ..default()
         },
         RigidBody::Static,
