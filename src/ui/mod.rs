@@ -1,6 +1,6 @@
 mod timer;
 
-use bevy::prelude::{app::PluginGroupBuilder, *};
+use bevy::{app::PluginGroupBuilder, prelude::*};
 
 pub struct UIPlugins;
 

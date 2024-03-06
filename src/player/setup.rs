@@ -27,5 +27,6 @@ fn setup_player(
         Player,
         RigidBody::Dynamic,
         Collider::capsule(1.0, 0.5),
+        LinearVelocity::default(),
     ));
 }

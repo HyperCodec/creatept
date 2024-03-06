@@ -1,5 +1,5 @@
-use bevy::{app::PluginGroupBuilder, prelude::*};
-use bevy_egui::EguiContext;
+use bevy::{app::PluginGroupBuilder, prelude::*, window::PrimaryWindow};
+use bevy_egui::{egui, EguiContext};
 use bevy_inspector_egui::prelude::*;
 
 pub struct DebugPlugins;
