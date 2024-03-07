@@ -17,6 +17,6 @@ fn display_timer(
     let el = etime.time.elapsed();
 
     egui::Window::new("Timer").show(contexts.ctx_mut(), |ui| {
-        ui.label(format!("Time: {}:{}", el.as_secs() / 60, el.as_secs_f32() % 60.));
+        ui.label(format!("Time: {}:{:.3}", el.as_secs() / 60, el.as_secs_f32() % 60.));
     });
 }
