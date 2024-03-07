@@ -1,7 +1,6 @@
 use bevy::prelude::*;
-use bevy_xpbd_3d::prelude::*;
-
-use crate::player::Player;
+use bevy_fps_controller::controller::LogicalPlayer;
+use bevy_rapier3d::prelude::*;
 
 use super::EnvironmentTime;
 
@@ -26,13 +25,13 @@ pub struct Goal;
 
 fn handle_collision_goal(
     goal_q: Query<Entity, With<Goal>>,
-    colliding_q: Query<&CollidingEntities, With<Player>>,
+    colliding_q: Query<&CollidingEntities, With<LogicalPlayer>>,
     mut ev: EventWriter<EndLevelEvent>,
-    mut commands: Commands,
 ) {
     for coll_ents in &colliding_q {
+
         for goal in &goal_q {
-            if coll_ents.contains(&goal) {
+            if coll_ents.contains(goal) {
                 ev.send(EndLevelEvent);
                 break;
             }

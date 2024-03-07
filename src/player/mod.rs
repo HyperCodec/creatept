@@ -1,7 +1,7 @@
-pub mod input;
 mod setup;
 
 use bevy::{app::PluginGroupBuilder, prelude::*};
+use bevy_fps_controller::controller::FpsControllerPlugin;
 
 pub struct PlayerPlugins;
 
@@ -9,12 +9,9 @@ impl PluginGroup for PlayerPlugins {
     fn build(self) -> PluginGroupBuilder {
         PluginGroupBuilder::start::<Self>()
             .add(setup::PlayerSpawnPlugin)
-            .add(input::InputPlugin)
+            .add(FpsControllerPlugin)
     }
 }
-
-#[derive(Component)]
-pub struct Player;
 
 #[derive(Component)]
 pub struct PlayerCamera;

@@ -1,49 +1,67 @@
-use bevy::{core_pipeline::bloom::BloomSettings, prelude::*};
-use bevy_xpbd_3d::prelude::*;
+use std::f32::consts::TAU;
 
-use super::{Player, PlayerCamera};
+use bevy::{core_pipeline::bloom::BloomSettings, prelude::*};
+use bevy_rapier3d::prelude::*;
+use bevy_fps_controller::controller::*;
+
+use super::PlayerCamera;
 
 pub struct PlayerSpawnPlugin;
 
 impl Plugin for PlayerSpawnPlugin {
     fn build(&self, app: &mut App) {
         app
-            .add_systems(Startup, setup_player)
-            .add_systems(Update, move_camera_with_player.after(setup_player));
+            .add_systems(Startup, setup_player);
     }
 }
 
 fn setup_player(
     mut commands: Commands,
 ) {
-    // main player
-    commands.spawn((
-        TransformBundle::default(),
-        Player,
-        RigidBody::Dynamic,
-        Collider::capsule(1.0, 0.5),
-    )).with_children(|player| {
-        // player camera
-        player.spawn((
-            Camera3dBundle {
-                camera: Camera {
-                    hdr: true,
-                    ..default()
-                },
+    let logical_entity = commands
+        .spawn((
+            Collider::capsule(Vec3::ZERO, Vec3::Y, 0.5),
+            Friction {
+                coefficient: 0.0,
+                combine_rule: CoefficientCombineRule::Min,
+            },
+            Restitution {
+                coefficient: 0.0,
+                combine_rule: CoefficientCombineRule::Min,
+            },
+            ActiveEvents::COLLISION_EVENTS,
+            Velocity::zero(),
+            RigidBody::Dynamic,
+            Sleeping::disabled(),
+            LockedAxes::ROTATION_LOCKED,
+            AdditionalMassProperties::Mass(1.0),
+            GravityScale(0.0),
+            Ccd { enabled: true }, // Prevent clipping when going fast
+            TransformBundle::from_transform(Transform::from_xyz(0.0, 3.0, 0.0)),
+            LogicalPlayer,
+            FpsControllerInput {
+                pitch: -TAU / 12.0,
+                yaw: TAU * 5.0 / 8.0,
                 ..default()
             },
-            BloomSettings::NATURAL,
-            PlayerCamera,
-        ));
-    });
-}
+            FpsController::default(),
+        ))
+        .insert(CameraConfig {
+            height_offset: 0.0,
+            radius_scale: 0.75,
+        })
+        .id();
 
-fn move_camera_with_player(
-    player_q: Query<&Transform, (With<Player>, Without<PlayerCamera>)>,
-    mut cam_q: Query<&mut Transform, (With<PlayerCamera>, Without<Player>)>,
-) {
-    let mut cam_trans = cam_q.single_mut();
-    let player_trans = player_q.single();
-
-    cam_trans.translation = player_trans.translation;
+    commands.spawn((
+        Camera3dBundle {
+            camera: Camera {
+                hdr: true,
+                ..default()
+            },
+            ..default()
+        },
+        BloomSettings::NATURAL,
+        RenderPlayer { logical_entity },
+        PlayerCamera,
+    ));
 }

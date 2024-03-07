@@ -1,5 +1,5 @@
 use bevy::prelude::*;
-use bevy_xpbd_3d::prelude::*;
+use bevy_rapier3d::prelude::*;
 
 pub struct EnvironmentSetupPlugin;
 
@@ -22,8 +22,8 @@ fn setup_environment(
             transform: Transform::from_xyz(0., -1., 0.),
             ..default()
         },
-        RigidBody::Static,
-        AsyncCollider(ComputedCollider::TriMesh),
+        RigidBody::Fixed,
+        AsyncCollider(ComputedColliderShape::TriMesh),
     ));
 
     // point light

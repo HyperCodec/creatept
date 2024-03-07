@@ -4,7 +4,7 @@ mod debug;
 mod ui;
 
 use bevy::prelude::*;
-use bevy_xpbd_3d::prelude::*;
+use bevy_rapier3d::prelude::*;
 
 fn main() {
     App::new()
@@ -16,7 +16,7 @@ fn main() {
                 }),
                 ..default()
             }),
-            PhysicsPlugins::default(),
+            RapierPhysicsPlugin::<NoUserData>::default(),
 
             player::PlayerPlugins,
             environment::EnvironmentPlugins,
