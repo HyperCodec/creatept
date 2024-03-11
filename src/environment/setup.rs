@@ -1,4 +1,4 @@
-use bevy::prelude::*;
+use bevy::{prelude::*, render::mesh::shape::Quad};
 use bevy_rapier3d::prelude::*;
 
 pub struct EnvironmentSetupPlugin;
@@ -17,7 +17,9 @@ fn setup_environment(
     // basic plane for testing
     commands.spawn((
         PbrBundle {
-            mesh: meshes.add(Mesh::from(Plane3d::new(Vec3::Y))),
+            mesh: meshes.add(Mesh::from(Cuboid {
+                half_size: Vec3::new(100., 0.01, 100.),
+            })),
             material: materials.add(StandardMaterial::from(Color::GREEN)),
             transform: Transform::from_xyz(0., -1., 0.),
             ..default()
