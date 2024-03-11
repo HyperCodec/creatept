@@ -1,4 +1,4 @@
-use bevy::{prelude::*, render::mesh::shape::Quad};
+use bevy::prelude::*;
 use bevy_rapier3d::prelude::*;
 
 pub struct EnvironmentSetupPlugin;

@@ -563,6 +563,47 @@ dependencies = [
 ]
 
 [[package]]
+name = "bevy_editor_pls"
+version = "0.8.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d08e119d7983670a41690d60ef0e4730f0c02719118b8e6dd42b13f90a0348c0"
+dependencies = [
+ "bevy",
+ "bevy_editor_pls_core",
+ "bevy_editor_pls_default_windows",
+ "egui",
+ "egui-gizmo",
+]
+
+[[package]]
+name = "bevy_editor_pls_core"
+version = "0.8.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "84de9dc9204638e9eabaef4f1426a73280570a98ab3cf750e473d89e8d49e1f4"
+dependencies = [
+ "bevy",
+ "bevy-inspector-egui",
+ "egui_dock",
+ "indexmap",
+]
+
+[[package]]
+name = "bevy_editor_pls_default_windows"
+version = "0.8.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "4d12a4a8a762b6dd1212700dd4a82a6f16ed8cab1d6313c242a23fb53610ce1d"
+dependencies = [
+ "bevy",
+ "bevy-inspector-egui",
+ "bevy_editor_pls_core",
+ "bevy_mod_debugdump",
+ "egui-gizmo",
+ "indexmap",
+ "opener",
+ "pretty-type-name",
+]
+
+[[package]]
 name = "bevy_egui"
 version = "0.25.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -790,6 +831,21 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "3075c01f2b1799945892d5310fc1836e47c045dfe6af5878a304a475931a0c5f"
 dependencies = [
  "glam",
+]
+
+[[package]]
+name = "bevy_mod_debugdump"
+version = "0.10.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d39eb6372d6af22b209d68c10e3b742938b450117281387c94ce3f9f51902b76"
+dependencies = [
+ "bevy_app",
+ "bevy_ecs",
+ "bevy_render",
+ "bevy_utils",
+ "once_cell",
+ "petgraph",
+ "pretty-type-name",
 ]
 
 [[package]]
@@ -1258,6 +1314,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "bstr"
+version = "1.9.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "05efc5cfd9110c8416e471df0e96702d58690178e206e61b7173706673c93706"
+dependencies = [
+ "memchr",
+ "regex-automata 0.4.6",
+ "serde",
+]
+
+[[package]]
 name = "bumpalo"
 version = "3.15.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1575,6 +1642,7 @@ version = "0.1.0"
 dependencies = [
  "bevy",
  "bevy-inspector-egui",
+ "bevy_editor_pls",
  "bevy_egui",
  "bevy_fps_controller",
  "bevy_rapier3d",
@@ -1698,6 +1766,16 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "9ea835d29036a4087793836fa931b08837ad5e957da9e23886b29586fb9b6650"
 
 [[package]]
+name = "duplicate"
+version = "1.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "de78e66ac9061e030587b2a2e75cc88f22304913c907b11307bca737141230cb"
+dependencies = [
+ "heck",
+ "proc-macro-error",
+]
+
+[[package]]
 name = "ecolor"
 version = "0.26.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1715,6 +1793,28 @@ dependencies = [
  "ahash",
  "epaint",
  "nohash-hasher",
+]
+
+[[package]]
+name = "egui-gizmo"
+version = "0.16.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "2cdd96a8bc62d5a7dbc03fe08db7bb44b50ac4167c2620d482530d9af6e27634"
+dependencies = [
+ "egui",
+ "glam",
+ "mint",
+]
+
+[[package]]
+name = "egui_dock"
+version = "0.11.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "66abdc4b3040c20462deb534b8221ffaea72dc95522330b38daa23dd67b35e53"
+dependencies = [
+ "duplicate",
+ "egui",
+ "paste",
 ]
 
 [[package]]
@@ -2040,6 +2140,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "151665d9be52f9bb40fc7966565d39666f2d1e69233571b71b87791c7e0528b3"
 dependencies = [
  "bytemuck",
+ "mint",
  "serde",
 ]
 
@@ -2210,6 +2311,12 @@ dependencies = [
  "widestring",
  "winapi",
 ]
+
+[[package]]
+name = "heck"
+version = "0.4.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "95505c38b4572b2d910cecb0281560f54b440a19336cbbcb27bf6ce6adc6f5a8"
 
 [[package]]
 name = "hexasphere"
@@ -2605,6 +2712,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "mint"
+version = "0.5.9"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e53debba6bda7a793e5f99b8dacf19e626084f525f7829104ba9898f367d85ff"
+
+[[package]]
 name = "naga"
 version = "0.19.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2769,6 +2882,15 @@ name = "nonmax"
 version = "0.5.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "610a5acd306ec67f907abe5567859a3c693fb9886eb1f012ab8f2a47bef3db51"
+
+[[package]]
+name = "normpath"
+version = "1.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "5831952a9476f2fed74b77d74182fa5ddc4d21c72ec45a333b250e3ed0272804"
+dependencies = [
+ "windows-sys 0.52.0",
+]
 
 [[package]]
 name = "ntapi"
@@ -3018,6 +3140,17 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "3fdb12b2476b595f9358c5161aa467c2438859caa136dec86c26fdd2efe17b92"
 
 [[package]]
+name = "opener"
+version = "0.6.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "6c62dcb6174f9cb326eac248f07e955d5d559c272730b6c03e396b443b562788"
+dependencies = [
+ "bstr",
+ "normpath",
+ "winapi",
+]
+
+[[package]]
 name = "orbclient"
 version = "0.3.47"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3201,6 +3334,30 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "6d37c51ca738a55da99dc0c4a34860fd675453b8b36209178c2249bb13651284"
 dependencies = [
  "toml_edit 0.21.1",
+]
+
+[[package]]
+name = "proc-macro-error"
+version = "1.0.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "da25490ff9892aab3fcf7c36f08cfb902dd3e71ca0f9f9517bea02a73a5ce38c"
+dependencies = [
+ "proc-macro-error-attr",
+ "proc-macro2",
+ "quote",
+ "syn 1.0.109",
+ "version_check",
+]
+
+[[package]]
+name = "proc-macro-error-attr"
+version = "1.0.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a1be40180e52ecc98ad80b184934baf3d0d29f979574e439af5a55274b35f869"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "version_check",
 ]
 
 [[package]]
