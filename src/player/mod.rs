@@ -1,4 +1,5 @@
 mod setup;
+mod special_movement;
 
 use bevy::{app::PluginGroupBuilder, prelude::*};
 use bevy_fps_controller::controller::FpsControllerPlugin;

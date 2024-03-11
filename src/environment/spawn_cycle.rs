@@ -12,7 +12,8 @@ impl Plugin for SpawnCyclePlugin {
             .add_event::<EndLevelEvent>()
             .add_systems(Update, (
                 handle_collision_goal.before(end_level),
-                end_level.run_if(|ev: EventReader<EndLevelEvent>| !ev.is_empty())
+                end_level.run_if(|ev: EventReader<EndLevelEvent>| !ev.is_empty()),
+                respawn.run_if(|ev: EventReader<RespawnEvent>| !ev.is_empty()),
             ));
     }
 }
@@ -50,4 +51,21 @@ fn end_level(
     etime.is_ticking = false;
 
     // TODO other level end stuff
+}
+
+#[derive(Event)]
+pub struct RespawnEvent;
+
+fn respawn(
+    spawn_q: Query<&Transform, (With<Spawnpoint>, Without<LogicalPlayer>)>,
+    mut player_q: Query<(&mut Transform, &mut Velocity), (With<LogicalPlayer>, Without<Spawnpoint>)>,
+    mut etime: ResMut<EnvironmentTime>,
+) {
+    let spawn = spawn_q.single();
+    let (mut player_trans, mut player_vel) = player_q.single_mut();
+
+    *player_trans = spawn.clone();
+    *player_vel = Velocity::zero();
+
+    etime.time.reset();
 }
