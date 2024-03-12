@@ -11,6 +11,12 @@ pub struct Explosive {
     pub damage: f32,
 }
 
+#[derive(Bundle)]
+pub struct ExplosiveBundle {
+    pub explosive: Explosive,
+    pub transform: TransformBundle,
+}
+
 pub(super) fn handle_explosions(
     explosions_q: Query<(Entity, &Explosive, &Transform)>,
     player_q: Query<&Transform, With<LogicalPlayer>>,
