@@ -48,10 +48,12 @@ fn handle_explosions(
     let player_transform = player_q.single();
 
     for (entity, explosive, transform) in explosions_q.iter() {
-        let distance = transform.translation.distance(player_transform.translation);
+        let distance = transform.translation.distance(player_transform.translation).max(0.1);
         if distance < explosive.radius {
+            let strength = explosive.force.powi(2) / distance;
+
             let direction = (player_transform.translation - transform.translation).normalize();
-            let force = direction * explosive.force;
+            let force = direction * strength;
             let event = PlayerEnactForceEvent {
                 force: Velocity {
                     linvel: force,
