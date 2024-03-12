@@ -1,6 +1,8 @@
 pub mod explosive;
+pub mod projectile;
 
 use explosive::*;
+use projectile::*;
 
 use bevy::prelude::*;
 use bevy_fps_controller::controller::LogicalPlayer;
@@ -15,6 +17,7 @@ impl Plugin for SpecialMovementPlugin {
             .add_systems(Update, (
                 handle_player_enact_force_event.after(handle_explosions),
                 handle_explosions,
+                handle_explosive_collision,
             ));
     }
 }
