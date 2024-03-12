@@ -11,6 +11,7 @@ impl PluginGroup for PlayerPlugins {
         PluginGroupBuilder::start::<Self>()
             .add(setup::PlayerSpawnPlugin)
             .add(FpsControllerPlugin)
+            .add(special_movement::SpecialMovementPlugin)
     }
 }
 
