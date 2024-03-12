@@ -5,30 +5,30 @@ use bevy_fps_controller::controller::LogicalPlayer;
 use super::PlayerEnactForceEvent;
 
 #[derive(Component)]
-pub struct Explosive {
+pub struct Explosion {
     pub radius: f32,
     pub force: f32,
     pub damage: f32,
 }
 
 #[derive(Bundle)]
-pub struct ExplosiveBundle {
-    pub explosive: Explosive,
+pub struct ExplosionBundle {
+    pub explosion: Explosion,
     pub transform: TransformBundle,
 }
 
 pub(super) fn handle_explosions(
-    explosions_q: Query<(Entity, &Explosive, &Transform)>,
+    explosions_q: Query<(Entity, &Explosion, &Transform)>,
     player_q: Query<&Transform, With<LogicalPlayer>>,
     mut evw: EventWriter<PlayerEnactForceEvent>,
     mut commands: Commands,
 ) {
     let player_transform = player_q.single();
 
-    for (entity, explosive, transform) in explosions_q.iter() {
+    for (entity, explosion, transform) in explosions_q.iter() {
         let distance = transform.translation.distance(player_transform.translation).max(0.1);
-        if distance < explosive.radius {
-            let strength = explosive.force.powi(2) / distance;
+        if distance < explosion.radius {
+            let strength = explosion.force.powi(2) / distance;
 
             let direction = (player_transform.translation - transform.translation).normalize();
             let force = direction * strength;
