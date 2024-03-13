@@ -28,10 +28,14 @@ impl Into<Explosion> for &ExplodeOnTouch {
 }
 
 pub(super) fn handle_explosive_collision(
-    query: Query<(Entity, &ExplodeOnTouch, &Transform), With<CollidingEntities>>,
+    query: Query<(Entity, &ExplodeOnTouch, &Transform, &CollidingEntities)>,
     mut commands: Commands,
 ) {
-    for (entity, explode, transform) in query.iter() {
+    for (entity, explode, transform, collisions) in query.iter() {
+        if collisions.is_empty() {
+            continue;
+        }
+        
         commands.spawn(ExplosionBundle {
             explosion: explode.into(),
             transform: Transform::from_translation(transform.translation).into(),
