@@ -8,6 +8,7 @@ pub struct ExplosiveProjectileBundle {
     pub collider: Collider,
     pub velocity: Velocity,
     pub explosion: ExplodeOnTouch,
+    pub active_events: ActiveEvents,
 }
 
 #[derive(Component)]
@@ -28,19 +29,26 @@ impl Into<Explosion> for &ExplodeOnTouch {
 }
 
 pub(super) fn handle_explosive_collision(
-    query: Query<(Entity, &ExplodeOnTouch, &Transform, &CollidingEntities)>,
+    explosive_query: Query<(Entity, &ExplodeOnTouch, &Transform)>,
+    mut collision_events: EventReader<CollisionEvent>,
     mut commands: Commands,
 ) {
-    for (entity, explode, transform, collisions) in query.iter() {
-        if collisions.is_empty() {
-            continue;
-        }
-        
-        commands.spawn(ExplosionBundle {
-            explosion: explode.into(),
-            transform: Transform::from_translation(transform.translation).into(),
-        });
+    for event in collision_events.read() {
+        for (entity, explode, transform) in explosive_query.iter() {
+            info!("Explosive collision");
+    
+            if let CollisionEvent::Started(e1, e2, _) = event {
+                if *e1 != entity && *e2 != entity {
+                    continue;
+                }
 
-        commands.entity(entity).despawn();
+                commands.spawn(ExplosionBundle {
+                    explosion: explode.into(),
+                    transform: Transform::from_translation(transform.translation).into(),
+                });
+        
+                commands.entity(entity).despawn_recursive();
+            }
+        }
     }
 }

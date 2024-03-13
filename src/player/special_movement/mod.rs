@@ -1,5 +1,6 @@
 pub mod explosive;
 pub mod projectile;
+pub mod specific;
 
 use explosive::*;
 use projectile::*;
@@ -16,9 +17,10 @@ impl Plugin for SpecialMovementPlugin {
             .add_event::<PlayerEnactForceEvent>()
             .add_systems(Update, (
                 handle_player_enact_force_event.after(handle_explosions),
-                handle_explosions,
+                handle_explosions.after(handle_explosive_collision),
                 handle_explosive_collision,
-            ));
+            ))
+            .add_plugins(specific::SpecialMovementSpecificsPlugin);
     }
 }
 
