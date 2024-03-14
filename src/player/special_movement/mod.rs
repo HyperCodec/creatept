@@ -1,9 +1,7 @@
 pub mod explosive;
-pub mod projectile;
-pub mod specific;
+pub mod bomb;
 
 use explosive::*;
-use projectile::*;
 
 use bevy::prelude::*;
 use bevy_fps_controller::controller::LogicalPlayer;
@@ -17,10 +15,10 @@ impl Plugin for SpecialMovementPlugin {
             .add_event::<PlayerEnactForceEvent>()
             .add_systems(Update, (
                 handle_player_enact_force_event.after(handle_explosions),
-                handle_explosions.after(handle_explosive_collision),
-                handle_explosive_collision,
-            ))
-            .add_plugins(specific::SpecialMovementSpecificsPlugin);
+                bomb::spawn_bomb.run_if(|inputs: Res<ButtonInput<KeyCode>>| inputs.just_pressed(KeyCode::KeyR)), // temp keybind
+                bomb::tick_bombs,
+                handle_explosions,
+            ));
     }
 }
 
