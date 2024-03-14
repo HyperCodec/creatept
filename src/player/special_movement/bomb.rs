@@ -66,7 +66,6 @@ pub(super) fn tick_bombs(
                 explosion: Explosion {
                     radius: 5.,
                     force: 10.,
-                    damage: 10.,
                 },
                 transform: TransformBundle::from_transform(Transform::from_translation(transform.translation - Vec3::Y * 0.5)),
             });

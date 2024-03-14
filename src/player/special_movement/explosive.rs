@@ -8,7 +8,6 @@ use super::PlayerEnactForceEvent;
 pub struct Explosion {
     pub radius: f32,
     pub force: f32,
-    pub damage: f32,
 }
 
 #[derive(Bundle)]
@@ -26,9 +25,9 @@ pub(super) fn handle_explosions(
     let player_transform = player_q.single();
 
     for (entity, explosion, transform) in explosions_q.iter() {
-        let distance = transform.translation.distance(player_transform.translation).max(0.1);
+        let distance = transform.translation.distance(player_transform.translation).max(1.);
         if distance < explosion.radius {
-            let strength = explosion.force.powi(2) / distance;
+            let strength = explosion.force / distance;
 
             let direction = (player_transform.translation - transform.translation).normalize();
             let force = direction * strength;
