@@ -73,12 +73,19 @@ fn setup_player(
     ));
 
     // crosshair
-    let style = TextStyle {
+    let text_style = TextStyle {
+        font: common_assets.times_new_roman,
+        font_size: 25.,
+        color: Color::Rgba(1., 1., 1., 0.5),
         ..default()
     };
 
-    // TODO stuff https://github.com/bevyengine/bevy/blob/latest/examples/3d/blend_modes.rs
-    commands.spawn(TextBundle::from_section("+", style));
+    commands.spawn(TextBundle::from_section("+", text_style).with_style(Style {
+        position_type: PositionType::Absolute,
+        top: Val::Percent(50.),
+        left: Val::Percent(50.),
+        ..default()
+    }));
 }
 
 fn manage_cursor(
