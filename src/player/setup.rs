@@ -1,8 +1,10 @@
 use std::f32::consts::TAU;
 
-use bevy::{core_pipeline::bloom::BloomSettings, prelude::*};
+use bevy::{core_pipeline::bloom::BloomSettings, prelude::*, window::CursorGrabMode};
 use bevy_rapier3d::prelude::*;
 use bevy_fps_controller::controller::*;
+
+use crate::common_assets::CommonAssets;
 
 use super::PlayerCamera;
 
@@ -13,10 +15,14 @@ impl Plugin for PlayerSpawnPlugin {
         app
             .add_systems(Startup, setup_player)
             .add_systems(Update, manage_cursor);
+
+        #[cfg(target_arch = "wasm32")]
+        app.insert_resource(Msaa::Off);
     }
 }
 
 fn setup_player(
+    common_assets: Res<CommonAssets>,
     mut commands: Commands,
 ) {
     let logical_entity = commands
@@ -65,6 +71,14 @@ fn setup_player(
         RenderPlayer { logical_entity },
         PlayerCamera,
     ));
+
+    // crosshair
+    let style = TextStyle {
+        ..default()
+    };
+
+    // TODO stuff https://github.com/bevyengine/bevy/blob/latest/examples/3d/blend_modes.rs
+    commands.spawn(TextBundle::from_section("+", style));
 }
 
 fn manage_cursor(
