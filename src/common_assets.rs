@@ -14,7 +14,7 @@ pub struct CommonAssets {
     pub times_new_roman: Handle<Font>,
 }
 
-fn init_assets(
+pub(crate) fn init_assets(
     asset_server: Res<AssetServer>,
     mut commands: Commands,
 ) {

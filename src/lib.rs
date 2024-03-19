@@ -5,7 +5,7 @@ mod player;
 mod environment;
 mod debug;
 mod ui;
-mod common_assets;
+pub mod common_assets;
 
 pub fn apply_game_plugins(mut app: App) -> App {
     app

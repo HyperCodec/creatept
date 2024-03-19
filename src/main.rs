@@ -2,6 +2,7 @@ mod player;
 mod environment;
 mod debug;
 mod ui;
+mod common_assets;
 
 use bevy::prelude::*;
 

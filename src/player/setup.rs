@@ -4,7 +4,7 @@ use bevy::{core_pipeline::bloom::BloomSettings, prelude::*, window::CursorGrabMo
 use bevy_rapier3d::prelude::*;
 use bevy_fps_controller::controller::*;
 
-use crate::common_assets::CommonAssets;
+use crate::common_assets::{self, CommonAssets};
 
 use super::PlayerCamera;
 
@@ -13,7 +13,8 @@ pub struct PlayerSpawnPlugin;
 impl Plugin for PlayerSpawnPlugin {
     fn build(&self, app: &mut App) {
         app
-            .add_systems(Startup, setup_player)
+            .add_systems(Startup, setup_player
+                .after(common_assets::init_assets))
             .add_systems(Update, manage_cursor);
 
         #[cfg(target_arch = "wasm32")]
@@ -27,7 +28,7 @@ fn setup_player(
 ) {
     let logical_entity = commands
         .spawn((
-            Collider::capsule(Vec3::ZERO, Vec3::Y, 0.5),
+            Collider::capsule(Vec3::ZERO, Vec3::Y, 0.25),
             Friction {
                 coefficient: 0.0,
                 combine_rule: CoefficientCombineRule::Min,
@@ -74,10 +75,14 @@ fn setup_player(
 
     // crosshair
     let text_style = TextStyle {
-        font: common_assets.times_new_roman,
+        font: common_assets.times_new_roman.clone(),
         font_size: 25.,
-        color: Color::Rgba(1., 1., 1., 0.5),
-        ..default()
+        color: Color::Rgba {
+            red: 1., 
+            green: 1., 
+            blue: 1.,
+            alpha: 0.5
+        },
     };
 
     commands.spawn(TextBundle::from_section("+", text_style).with_style(Style {
