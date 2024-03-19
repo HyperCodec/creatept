@@ -13,8 +13,11 @@ pub struct PlayerSpawnPlugin;
 impl Plugin for PlayerSpawnPlugin {
     fn build(&self, app: &mut App) {
         app
-            .add_systems(Startup, setup_player
-                .after(common_assets::init_assets))
+            .add_systems(Startup, (
+                setup_player
+                    .after(common_assets::init_assets),
+                initial_grab_cursor,
+            ))
             .add_systems(Update, manage_cursor);
 
         #[cfg(target_arch = "wasm32")]
@@ -114,4 +117,12 @@ fn manage_cursor(
             controller.enable_input = false;
         }
     }
+}
+
+fn initial_grab_cursor(
+    mut window_query: Query<&mut Window>,
+) {
+    let mut window = window_query.single_mut();
+    window.cursor.grab_mode = CursorGrabMode::Locked;
+    window.cursor.visible = false;
 }
