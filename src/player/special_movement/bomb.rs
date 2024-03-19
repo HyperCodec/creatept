@@ -1,10 +1,11 @@
 use bevy::prelude::*;
 use bevy_rapier3d::prelude::*;
 use bevy_fps_controller::controller::LogicalPlayer;
+use bevy_hanabi::prelude::*;
 
 use crate::player::PlayerCamera;
 
-use super::{Explosion, ExplosionBundle};
+use super::{generate_explosion_particles, Explosion, ExplosionBundle};
 
 #[derive(Component)]
 pub struct Bomb {
@@ -55,6 +56,7 @@ pub(super) fn tick_bombs(
     time: Res<Time>,
     mut commands: Commands,
     mut bombs_q: Query<(Entity, &Transform, &mut Bomb)>,
+    mut effects: ResMut<Assets<EffectAsset>>,
 ) {
     let dt = time.delta();
 
@@ -64,13 +66,19 @@ pub(super) fn tick_bombs(
         if bomb.timer.finished() {
             commands.entity(entity).despawn_recursive();
 
-            commands.spawn(ExplosionBundle {
-                explosion: Explosion {
-                    radius: 5.,
-                    force: 25.,
+            let effect = generate_explosion_particles(&mut effects, 5.);
+
+            commands.spawn((
+                ExplosionBundle {
+                    explosion: Explosion {
+                        radius: 5.,
+                        force: 25.,
+                    },
+                    transform: TransformBundle::from_transform(Transform::from_translation(transform.translation - Vec3::Y * 0.5)),
                 },
-                transform: TransformBundle::from_transform(Transform::from_translation(transform.translation - Vec3::Y * 0.5)),
-            });
+                ParticleEffect::new(effect),
+            ));
         }
     }
 }
+
