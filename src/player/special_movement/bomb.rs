@@ -42,9 +42,11 @@ pub(super) fn spawn_bomb(
             linvel: bomb_linvel,
             angvel: Vec3::ZERO,
         },
+
+        // TODO stop it from rolling so much
         Friction {
-            coefficient: 1.5,
-            ..default()
+            coefficient: 10.,
+            combine_rule: CoefficientCombineRule::Multiply,
         }
     ));
 }
@@ -65,7 +67,7 @@ pub(super) fn tick_bombs(
             commands.spawn(ExplosionBundle {
                 explosion: Explosion {
                     radius: 5.,
-                    force: 10.,
+                    force: 25.,
                 },
                 transform: TransformBundle::from_transform(Transform::from_translation(transform.translation - Vec3::Y * 0.5)),
             });

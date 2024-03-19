@@ -26,6 +26,10 @@ fn setup_environment(
         },
         RigidBody::Fixed,
         AsyncCollider(ComputedColliderShape::TriMesh),
+        Friction {
+            coefficient: 1.0,
+            ..default()
+        }
     ));
 
     // point light
