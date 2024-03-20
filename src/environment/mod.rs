@@ -1,5 +1,6 @@
 mod setup;
 pub mod spawn_cycle;
+pub mod fx;
 
 use bevy::{app::PluginGroupBuilder, prelude::*, time::Stopwatch};
 
@@ -10,6 +11,7 @@ impl PluginGroup for EnvironmentPlugins {
         PluginGroupBuilder::start::<Self>()
             .add(setup::EnvironmentSetupPlugin)
             .add(EnvironmentBasePlugin)
+            .add(fx::FxPlugin)
     }
 }
 

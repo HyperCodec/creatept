@@ -1,5 +1,6 @@
 use bevy::prelude::*;
 use bevy_rapier3d::prelude::*;
+use bevy_hanabi::prelude::*;
 
 mod player;
 mod environment;
@@ -11,6 +12,7 @@ pub fn apply_game_plugins(mut app: App) -> App {
     app
         .add_plugins((
             RapierPhysicsPlugin::<NoUserData>::default(),
+            HanabiPlugin,
 
             common_assets::AssetsLoaderPlugin,
 

@@ -3,7 +3,7 @@ use bevy_rapier3d::prelude::*;
 use bevy_fps_controller::controller::LogicalPlayer;
 use bevy_hanabi::prelude::*;
 
-use crate::player::PlayerCamera;
+use crate::{environment::fx::DespawnAfterTime, player::PlayerCamera};
 
 use super::{generate_explosion_particles, Explosion, ExplosionBundle};
 
@@ -36,7 +36,7 @@ pub(super) fn spawn_bomb(
         PbrBundle {
             mesh: meshes.add(Mesh::from(Sphere { radius: 0.25 })),
             material: materials.add(StandardMaterial::from(Color::rgb(0.5, 0.5, 0.5))),
-            transform: *cam_transform,
+            transform: Transform::from_translation(cam_transform.translation - Vec3::Y * 0.1),
             ..default()
         },
         Velocity {
@@ -48,7 +48,7 @@ pub(super) fn spawn_bomb(
         Friction {
             coefficient: 10.,
             combine_rule: CoefficientCombineRule::Multiply,
-        }
+        },
     ));
 }
 
@@ -66,17 +66,25 @@ pub(super) fn tick_bombs(
         if bomb.timer.finished() {
             commands.entity(entity).despawn_recursive();
 
-            let effect = generate_explosion_particles(&mut effects, 5.);
+            let effect = generate_explosion_particles(&mut effects, 2.);
+
+            commands.spawn(ExplosionBundle {
+                explosion: Explosion {
+                    radius: 10.,
+                    force: 25.,
+                },
+                transform: Transform::from_translation(transform.translation - Vec3::Y * 0.5).into(),
+            });
 
             commands.spawn((
-                ExplosionBundle {
-                    explosion: Explosion {
-                        radius: 5.,
-                        force: 25.,
-                    },
-                    transform: TransformBundle::from_transform(Transform::from_translation(transform.translation - Vec3::Y * 0.5)),
+                ParticleEffectBundle {
+                    effect: ParticleEffect::new(effect),
+                    transform: Transform::from_translation(transform.translation),
+                    ..default()
                 },
-                ParticleEffect::new(effect),
+                DespawnAfterTime {
+                    timer: Timer::from_seconds(1., TimerMode::Once),
+                },
             ));
         }
     }
