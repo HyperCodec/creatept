@@ -1,6 +1,7 @@
 mod setup;
 pub mod spawn_cycle;
 pub mod fx;
+pub mod level_loading;
 
 use bevy::{app::PluginGroupBuilder, prelude::*, time::Stopwatch};
 
@@ -12,6 +13,7 @@ impl PluginGroup for EnvironmentPlugins {
             .add(setup::EnvironmentSetupPlugin)
             .add(EnvironmentBasePlugin)
             .add(fx::FxPlugin)
+            .add(level_loading::LevelLoadingPlugin)
     }
 }
 
