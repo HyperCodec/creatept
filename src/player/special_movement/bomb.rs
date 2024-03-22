@@ -3,7 +3,7 @@ use bevy_rapier3d::prelude::*;
 use bevy_fps_controller::controller::LogicalPlayer;
 use bevy_hanabi::prelude::*;
 
-use crate::{environment::fx::DespawnAfterTime, player::PlayerCamera};
+use crate::{environment::fx::{DespawnAfterTime, Sfx}, player::PlayerCamera};
 
 use super::{generate_explosion_particles, Explosion, ExplosionBundle};
 
@@ -54,6 +54,7 @@ pub(super) fn spawn_bomb(
 
 pub(super) fn tick_bombs(
     time: Res<Time>,
+    sfx: Res<Sfx>,
     mut commands: Commands,
     mut bombs_q: Query<(Entity, &Transform, &mut Bomb)>,
     mut effects: ResMut<Assets<EffectAsset>>,
@@ -80,6 +81,10 @@ pub(super) fn tick_bombs(
                 ParticleEffectBundle {
                     effect: ParticleEffect::new(effect),
                     transform: Transform::from_translation(transform.translation),
+                    ..default()
+                },
+                AudioBundle {
+                    source: sfx.explosion.clone(),
                     ..default()
                 },
                 DespawnAfterTime {

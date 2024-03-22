@@ -5,6 +5,7 @@ pub struct FxPlugin;
 impl Plugin for FxPlugin {
     fn build(&self, app: &mut App) {
         app
+            .add_systems(Startup, init_sfx)
             .add_systems(Update, despawn_after_time);
     }
 }
@@ -25,4 +26,17 @@ fn despawn_after_time(
             commands.entity(entity).despawn_recursive();
         }
     }
+}
+
+#[derive(Resource)]
+pub struct Sfx {
+    pub explosion: Handle<AudioSource>,
+}
+
+pub fn init_sfx(
+    asset_server: Res<AssetServer>,
+    mut commands: Commands,
+) {
+    let explosion = asset_server.load("sfx/explosion.ogg");
+    commands.insert_resource(Sfx { explosion });
 }

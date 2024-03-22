@@ -67,7 +67,7 @@ fn load_level(
 }
 
 pub fn init_levels(
-    asset_server: Res<AssetServer>,
+    _asset_server: Res<AssetServer>,
     mut commands: Commands,
 ) {
     // TODO load the actual scenes

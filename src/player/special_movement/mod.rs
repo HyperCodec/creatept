@@ -9,6 +9,7 @@ use bevy_rapier3d::prelude::*;
 
 pub struct SpecialMovementPlugin;
 
+// TODO turn into plugin group
 impl Plugin for SpecialMovementPlugin {
     fn build(&self, app: &mut App) {
         app
@@ -16,7 +17,7 @@ impl Plugin for SpecialMovementPlugin {
             .add_systems(Update, (
                 handle_player_enact_force_event.after(handle_explosions),
                 bomb::spawn_bomb.run_if(|inputs: Res<ButtonInput<KeyCode>>| inputs.just_pressed(KeyCode::KeyR)), // temp keybind
-                bomb::tick_bombs,
+                bomb::tick_bombs.after(crate::environment::fx::init_sfx),
                 handle_explosions,
             ));
     }
