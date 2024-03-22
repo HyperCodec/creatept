@@ -29,7 +29,10 @@ impl Plugin for EnvironmentBasePlugin {
             .init_resource::<EnvironmentTime>()
             .add_systems(Update, (
                 tick_time.run_if(|etime: Res<EnvironmentTime>| etime.is_ticking),
-                start_timer_on_level_load.run_if(|events: EventReader<LevelLoaded>| !events.is_empty()),
+                //start_timer.run_if(|events: EventReader<LevelLoaded>| !events.is_empty()),
+
+                // testing timer
+                start_timer.run_if(|inputs: Res<ButtonInput<KeyCode>>| inputs.just_pressed(KeyCode::KeyT)),
             ));
     }
 }
@@ -47,7 +50,7 @@ fn tick_time(
     etime.time.tick(time.delta());
 }
 
-fn start_timer_on_level_load(
+fn start_timer(
     mut timer: ResMut<EnvironmentTime>,
 ) {
     timer.time.reset();
