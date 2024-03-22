@@ -6,6 +6,8 @@ pub mod jump_pad;
 
 use bevy::{app::PluginGroupBuilder, prelude::*, time::Stopwatch};
 
+use level_loading::LevelLoaded;
+
 pub struct EnvironmentPlugins;
 
 impl PluginGroup for EnvironmentPlugins {
@@ -25,8 +27,10 @@ impl Plugin for EnvironmentBasePlugin {
     fn build(&self, app: &mut App) {
         app
             .init_resource::<EnvironmentTime>()
-            .add_systems(Update, 
-                tick_time.run_if(|etime: Res<EnvironmentTime>| etime.is_ticking));
+            .add_systems(Update, (
+                tick_time.run_if(|etime: Res<EnvironmentTime>| etime.is_ticking),
+                start_timer_on_level_load.run_if(|events: EventReader<LevelLoaded>| !events.is_empty()),
+            ));
     }
 }
 
@@ -41,4 +45,11 @@ fn tick_time(
     mut etime: ResMut<EnvironmentTime>,
 ) {
     etime.time.tick(time.delta());
+}
+
+fn start_timer_on_level_load(
+    mut timer: ResMut<EnvironmentTime>,
+) {
+    timer.time.reset();
+    timer.is_ticking = true;
 }

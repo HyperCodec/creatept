@@ -6,7 +6,8 @@ pub struct TimerUIPlugin;
 
 impl Plugin for TimerUIPlugin {
     fn build(&self, app: &mut App) {
-        app.add_systems(Update, display_timer);
+        app
+            .add_systems(Update,display_timer);
     }
 }
 

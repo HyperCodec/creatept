@@ -46,6 +46,8 @@ pub(super) fn handle_explosions(
 }
 
 // most of this is copied from the example in the bevy_hanabi repo, but modified to make it look more like an explosion
+
+// TODO for whatever reason, the initial explosion does not have any particles. only the second and so forth.
 pub fn generate_explosion_particles(
     effects: &mut ResMut<Assets<EffectAsset>>,
     radius: f32,
