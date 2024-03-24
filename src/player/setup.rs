@@ -4,7 +4,7 @@ use bevy::{core_pipeline::bloom::BloomSettings, prelude::*, window::CursorGrabMo
 use bevy_rapier3d::prelude::*;
 use bevy_fps_controller::controller::*;
 
-use crate::common_assets::{self, CommonAssets};
+use crate::{common_assets::CommonAssets, environment::level_loading::LevelCleanup};
 
 use super::PlayerCamera;
 
@@ -13,11 +13,7 @@ pub struct PlayerSpawnPlugin;
 impl Plugin for PlayerSpawnPlugin {
     fn build(&self, app: &mut App) {
         app
-            .add_systems(Startup, (
-                setup_player
-                    .after(common_assets::init_assets),
-                initial_grab_cursor,
-            ))
+            .add_systems(Startup, initial_grab_cursor)
             .add_systems(Update, manage_cursor);
 
         #[cfg(target_arch = "wasm32")]
@@ -25,9 +21,10 @@ impl Plugin for PlayerSpawnPlugin {
     }
 }
 
-fn setup_player(
-    common_assets: Res<CommonAssets>,
-    mut commands: Commands,
+pub fn setup_player(
+    common_assets: &Res<CommonAssets>,
+    commands: &mut Commands,
+    pos: Transform,
 ) {
     let logical_entity = commands
         .spawn((
@@ -48,7 +45,7 @@ fn setup_player(
             AdditionalMassProperties::Mass(1.0),
             GravityScale(0.0),
             Ccd { enabled: true }, // Prevent clipping when going fast
-            TransformBundle::from_transform(Transform::from_xyz(0.0, 3.0, 0.0)),
+            TransformBundle::from_transform(pos),
             LogicalPlayer,
             FpsControllerInput {
                 pitch: -TAU / 12.0,
@@ -61,6 +58,7 @@ fn setup_player(
             height_offset: 0.0,
             radius_scale: 0.75,
         })
+        .insert(LevelCleanup)
         .id();
 
     commands.spawn((
@@ -74,6 +72,7 @@ fn setup_player(
         BloomSettings::NATURAL,
         RenderPlayer { logical_entity },
         PlayerCamera,
+        LevelCleanup,
     ));
 
     // crosshair
@@ -93,7 +92,8 @@ fn setup_player(
         top: Val::Percent(50.),
         left: Val::Percent(50.),
         ..default()
-    }));
+    }))
+        .insert(LevelCleanup);
 }
 
 fn manage_cursor(

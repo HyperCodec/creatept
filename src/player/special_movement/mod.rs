@@ -7,6 +7,8 @@ use bevy::prelude::*;
 use bevy_fps_controller::controller::LogicalPlayer;
 use bevy_rapier3d::prelude::*;
 
+use crate::GameState;
+
 pub struct SpecialMovementPlugin;
 
 // TODO turn into plugin group
@@ -19,7 +21,9 @@ impl Plugin for SpecialMovementPlugin {
                 bomb::spawn_bomb.run_if(|inputs: Res<ButtonInput<KeyCode>>| inputs.just_pressed(KeyCode::KeyR)), // temp keybind
                 bomb::tick_bombs.after(crate::environment::fx::init_sfx),
                 handle_explosions,
-            ));
+            )
+            .run_if(|state: Res<State<GameState>>| state.is_playing()),
+        );
     }
 }
 

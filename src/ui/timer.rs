@@ -1,13 +1,14 @@
 use bevy::prelude::*;
 use bevy_egui::{egui, EguiContexts};
-use crate::environment::EnvironmentTime;
+use crate::{environment::EnvironmentTime, GameState};
 
 pub struct TimerUIPlugin;
 
 impl Plugin for TimerUIPlugin {
     fn build(&self, app: &mut App) {
         app
-            .add_systems(Update,display_timer);
+            .add_systems(Update,display_timer
+                .run_if(|state: Res<State<GameState>>| state.is_playing()));
     }
 }
 

@@ -3,18 +3,21 @@ use bevy_rapier3d::prelude::*;
 use bevy_fps_controller::controller::LogicalPlayer;
 use bevy_hanabi::prelude::*;
 
+use crate::environment::level_loading::LevelCleanup;
+
 use super::PlayerEnactForceEvent;
 
-#[derive(Component)]
+#[derive(Component, Default)]
 pub struct Explosion {
     pub radius: f32,
     pub force: f32,
 }
 
-#[derive(Bundle)]
+#[derive(Bundle, Default)]
 pub struct ExplosionBundle {
     pub explosion: Explosion,
     pub transform: TransformBundle,
+    pub level_cleanup: LevelCleanup,
 }
 
 pub(super) fn handle_explosions(

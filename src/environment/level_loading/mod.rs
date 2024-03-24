@@ -1,5 +1,9 @@
+mod test_level;
+
 use bevy::prelude::*;
 use bevy_rapier3d::prelude::*;
+
+use crate::GameState;
 
 pub struct LevelLoadingPlugin;
 
@@ -9,7 +13,14 @@ impl Plugin for LevelLoadingPlugin {
             .add_event::<LevelLoadRequest>()
             .add_event::<LevelLoaded>()
             .add_systems(Startup, init_levels)
-            .add_systems(Update, load_level);
+            .add_systems(Update, (
+                load_level,
+                change_playing_state
+                    .after(load_level)
+                    .run_if(|events: EventReader<LevelLoaded>| !events.is_empty()),
+                test_level::load_test_level
+                    .after(load_level),
+            ));
     }
 }
 
@@ -34,11 +45,11 @@ pub struct LevelLoaded {
     pub level: usize,
 }
 
-#[derive(Component)]
-pub struct Persistent;
+#[derive(Component, Default)]
+pub struct LevelCleanup;
 
 fn load_level(
-    entities: Query<Entity, Without<Persistent>>,
+    entities: Query<Entity, With<LevelCleanup>>,
     mut commands: Commands,
     mut level_manager: ResMut<LevelManager>,
     mut level_load_request: EventReader<LevelLoadRequest>,
@@ -58,8 +69,12 @@ fn load_level(
                     scene: level.scene.clone(),
                     ..default()
                 },
-                AsyncSceneCollider::default(),
+                AsyncSceneCollider {
+                    shape: Some(ComputedColliderShape::ConvexHull),
+                    ..default()
+                },
                 RigidBody::Fixed,
+                LevelCleanup,
             ));
             level_loaded.send(LevelLoaded { level: ev.level });
         }
@@ -67,7 +82,7 @@ fn load_level(
 }
 
 pub fn init_levels(
-    _asset_server: Res<AssetServer>,
+    asset_server: Res<AssetServer>,
     mut commands: Commands,
 ) {
     // TODO load the actual scenes
@@ -75,13 +90,15 @@ pub fn init_levels(
         current_level: 0,
         levels: vec![
             Level {
-                name: "level1".to_string(),
-                scene: Handle::default(),
-            },
-            Level {
-                name: "level2".to_string(),
-                scene: Handle::default(),
+                name: "test".to_string(),
+                scene: asset_server.load("scene/test.gltf#Scene0"),
             },
         ],
     });
+}
+
+fn change_playing_state(
+    mut state: ResMut<NextState<GameState>>,
+) {
+    state.set(GameState::Playing);
 }

@@ -2,19 +2,24 @@ use bevy::prelude::*;
 use bevy_fps_controller::controller::LogicalPlayer;
 use bevy_rapier3d::{prelude::*, rapier::geometry::CollisionEventFlags};
 
+use crate::GameState;
+
+use super::level_loading::LevelCleanup;
+
 pub struct JumpPadPlugin;
 
 impl Plugin for JumpPadPlugin {
     fn build(&self, app: &mut App) {
         app
             .add_systems(Update, (
-                jump_pad.after(tick_jump_pad_cooldowns),
+                jump_pad.after(tick_jump_pad_cooldowns)
+                    .run_if(|state: Res<State<GameState>>| state.is_playing()),
                 tick_jump_pad_cooldowns,
             ));
     }
 }
 
-#[derive(Component)]
+#[derive(Component, Default)]
 pub struct JumpPad {
     pub force: Velocity,
     pub cooldown: Timer,
@@ -27,6 +32,20 @@ pub struct JumpPadBundle {
     pub collider: Collider,
     pub transform: Transform,
     pub collision_events: ActiveEvents,
+    pub level_cleanup: LevelCleanup,
+}
+
+impl Default for JumpPadBundle {
+    fn default() -> Self {
+        Self {
+            jump_pad: JumpPad::default(),
+            rigid_body: RigidBody::Fixed,
+            collider: Collider::default(),
+            transform: Transform::default(),
+            collision_events: ActiveEvents::COLLISION_EVENTS,
+            level_cleanup: LevelCleanup,
+        }
+    }
 }
 
 fn jump_pad(

@@ -1,4 +1,4 @@
-use bevy::prelude::*;
+use bevy::{audio::Volume, prelude::*};
 use bevy_rapier3d::prelude::*;
 use bevy_fps_controller::controller::LogicalPlayer;
 use bevy_hanabi::prelude::*;
@@ -75,6 +75,7 @@ pub(super) fn tick_bombs(
                     force: 25.,
                 },
                 transform: Transform::from_translation(transform.translation - Vec3::Y * 0.5).into(),
+                ..default()
             });
 
             commands.spawn((
@@ -85,7 +86,10 @@ pub(super) fn tick_bombs(
                 },
                 AudioBundle {
                     source: sfx.explosion.clone(),
-                    ..default()
+                    settings: PlaybackSettings {
+                        volume: Volume::new(0.5),
+                        ..default()
+                    }
                 },
                 DespawnAfterTime {
                     timer: Timer::from_seconds(1., TimerMode::Once),

@@ -1,4 +1,4 @@
-mod setup;
+pub mod setup;
 mod special_movement;
 
 use bevy::{app::PluginGroupBuilder, prelude::*};

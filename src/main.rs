@@ -4,6 +4,7 @@ mod debug;
 mod ui;
 mod common_assets;
 
+pub use creatept::GameState;
 use bevy::prelude::*;
 
 fn main() {
