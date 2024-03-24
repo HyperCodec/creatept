@@ -8,7 +8,7 @@ mod debug;
 mod ui;
 pub mod common_assets;
 
-#[derive(Clone, Copy, Default, Eq, PartialEq, Debug, Hash, States)]
+#[derive(Resource, Default, PartialEq)]
 pub enum GameState {
     #[default]
     Menu,
@@ -18,17 +18,17 @@ pub enum GameState {
 
 impl GameState {
     pub fn is_playing(&self) -> bool {
-        *self == GameState::Playing
+        matches!(self, GameState::Playing)
     }
 
     pub fn is_menu(&self) -> bool {
-        *self == GameState::Menu
+        matches!(self, GameState::Menu)
     }
 }
 
 pub fn apply_game_plugins(mut app: App) -> App {
     app
-        .init_state::<GameState>()
+        .init_resource::<GameState>()
         .add_plugins((
             RapierPhysicsPlugin::<NoUserData>::default(),
             HanabiPlugin,

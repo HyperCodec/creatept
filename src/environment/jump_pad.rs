@@ -13,7 +13,7 @@ impl Plugin for JumpPadPlugin {
         app
             .add_systems(Update, (
                 jump_pad.after(tick_jump_pad_cooldowns)
-                    .run_if(|state: Res<State<GameState>>| state.is_playing()),
+                    .run_if(|state: Res<GameState>| state.is_playing()),
                 tick_jump_pad_cooldowns,
             ));
     }

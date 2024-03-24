@@ -1,6 +1,8 @@
 use bevy::prelude::*;
 
-use crate::{common_assets::{self, CommonAssets}, environment::level_loading::{LevelCleanup, LevelLoadRequest}, GameState};
+use crate::{common_assets::{self, CommonAssets}, environment::level_loading::{LevelCleanup, LevelLoadRequest, LevelManager}, GameState};
+
+use self::level_end::handle_return_click;
 
 use super::*;
 
@@ -9,11 +11,15 @@ pub struct LevelBrowserPlugin;
 impl Plugin for LevelBrowserPlugin {
     fn build(&self, app: &mut App) {
         app
+            .add_event::<ReturnToMenuEvent>()
             .add_systems(Startup, setup
                 .after(common_assets::init_assets))
             .add_systems(Update, (
                 handle_load_click
-                    .run_if(|state: Res<State<GameState>>| state.is_menu()),
+                    .run_if(|state: Res<GameState>| state.is_menu()),
+                setup
+                    .before(handle_return_click)
+                    .run_if(|mut ev: EventReader<ReturnToMenuEvent>| ev.read().count() > 0),
             ));
     }
 }
@@ -26,6 +32,7 @@ struct LoadLevelButton(usize);
 
 fn setup(
     common_assets: Res<CommonAssets>,
+    levels: Res<LevelManager>,
     mut commands: Commands,
 ) {
     commands.spawn((
@@ -34,13 +41,25 @@ fn setup(
         LevelCleanup,
     ));
 
+    let text_style = TextStyle {
+        font: common_assets.times_new_roman.clone(),
+        font_size: 25.,
+        color: Color::Rgba {
+            red: 0., 
+            green: 0., 
+            blue: 0.,
+            alpha: 1.,
+        },
+    };
+
     // root node
     commands.spawn((
         NodeBundle {
             style: Style {
                 width: Val::Percent(100.),
                 height: Val::Percent(100.),
-                justify_content: JustifyContent::SpaceBetween,
+                justify_content: JustifyContent::SpaceEvenly,
+                align_items: AlignItems::Center,
                 ..default()
             },
             ..default()
@@ -49,32 +68,25 @@ fn setup(
         LevelCleanup,
     ))
         .with_children(|parent| {
-            // button to load test level, centered
-            // TODO iterate through levels and make buttons for each
-            parent.spawn((
-                ButtonBundle {
-                    style: Style {
-                        width: Val::Percent(10.),
-                        height: Val::Percent(10.),
+            // level loading buttons
+            for (i, level) in levels.levels.iter().enumerate() {
+                parent.spawn((
+                    ButtonBundle {
+                        style: Style {
+                            width: Val::Px(100.),
+                            height: Val::Px(50.),
+                            align_items: AlignItems::Center,
+                            ..default()
+                        },
+                        background_color: BackgroundColor(Color::rgb(0.5, 0.5, 0.5)),
                         ..default()
                     },
-                    ..default()
-                },
-                LoadLevelButton(0),
-            ))
-                .with_children(|parent| {
-                    parent.spawn(TextBundle {
-                        text: Text::from_section(
-                            "Load Test Level",
-                            TextStyle {
-                                font: common_assets.times_new_roman.clone(),
-                                font_size: 20.,
-                                color: Color::WHITE,
-                            },
-                        ),
-                        ..default()
+                    LoadLevelButton(i),
+                ))
+                    .with_children(|parent| {
+                        parent.spawn(TextBundle::from_section(level.name.clone(), text_style.clone()));
                     });
-                });
+            }
         });
 }
 

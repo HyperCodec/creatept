@@ -2,40 +2,84 @@ use bevy::prelude::*;
 use bevy_fps_controller::controller::LogicalPlayer;
 use bevy_rapier3d::prelude::*;
 
-use super::EnvironmentTime;
+use crate::{environment::level_loading::cleanup, GameState};
+
+use super::{level_loading::LevelCleanup, EnvironmentTime};
 
 pub struct SpawnCyclePlugin;
 
 impl Plugin for SpawnCyclePlugin {
     fn build(&self, app: &mut App) {
         app
+            .add_event::<RespawnEvent>()
             .add_event::<EndLevelEvent>()
             .add_systems(Update, (
-                handle_collision_goal.before(end_level),
-                end_level.run_if(|ev: EventReader<EndLevelEvent>| !ev.is_empty()),
-                respawn.run_if(|ev: EventReader<RespawnEvent>| !ev.is_empty()),
+                end_level.run_if(|mut ev: EventReader<EndLevelEvent>| ev.read().count() > 0),
+                respawn.run_if(|mut ev: EventReader<RespawnEvent>| ev.read().count() > 0),
+
+                (
+                    handle_collision_goal.before(end_level),
+                    fall_off,
+                )
+                    .run_if(|state: Res<GameState>| state.is_playing()),
             ));
     }
 }
 
-#[derive(Component)]
+#[derive(Component, Default)]
 pub struct Spawnpoint;
 
-#[derive(Component)]
-pub struct Goal;
+#[derive(Bundle)]
+pub struct SpawnpointBundle {
+    pub spawnpoint: Spawnpoint,
+    pub transform: TransformBundle,
+    pub level_cleanup: LevelCleanup,
+}
+
+impl Default for SpawnpointBundle {
+    fn default() -> Self {
+        Self {
+            spawnpoint: Spawnpoint,
+            level_cleanup: LevelCleanup,
+            transform: TransformBundle::default(),
+        }
+    }
+}
+
+#[derive(Component, Default)]
+pub struct Goal{ 
+    pub size: f32,
+}
+
+#[derive(Bundle)]
+pub struct GoalBundle {
+    pub goal: Goal,
+    pub transform: TransformBundle,
+    pub level_cleanup: LevelCleanup,
+}
+
+impl Default for GoalBundle {
+    fn default() -> Self {
+        Self {
+            goal: Goal::default(),
+            level_cleanup: LevelCleanup,
+            transform: TransformBundle::default(),
+        }
+    }
+
+}
 
 fn handle_collision_goal(
-    goal_q: Query<Entity, With<Goal>>,
-    colliding_q: Query<&CollidingEntities, With<LogicalPlayer>>,
+    goal_q: Query<(&Transform, &Goal)>,
+    player_q: Query<&Transform, With<LogicalPlayer>>,
     mut ev: EventWriter<EndLevelEvent>,
+    mut state: ResMut<GameState>,
 ) {
-    for coll_ents in &colliding_q {
-
-        for goal in &goal_q {
-            if coll_ents.contains(goal) {
-                ev.send(EndLevelEvent);
-                break;
-            }
+    let player_transform = player_q.single();
+    for (goal_transform, goal) in goal_q.iter() {
+        if player_transform.translation.distance_squared(goal_transform.translation) < goal.size.powi(2) {
+            ev.send(EndLevelEvent);
+            *state = GameState::Menu;
         }
     }
 }
@@ -43,14 +87,18 @@ fn handle_collision_goal(
 #[derive(Event)]
 pub struct EndLevelEvent;
 
-fn end_level(
-    mut ev: EventReader<EndLevelEvent>,
+pub fn end_level(
+    entities: Query<Entity, With<LevelCleanup>>,
+    mut state: ResMut<GameState>,
     mut etime: ResMut<EnvironmentTime>,
+    mut commands: Commands,
 ) {
-    ev.read();
+    info!("Ending level");
     etime.is_ticking = false;
 
-    // TODO other level end stuff
+    *state = GameState::Menu;
+
+    cleanup(&entities, &mut commands);
 }
 
 #[derive(Event)]
@@ -59,7 +107,7 @@ pub struct RespawnEvent;
 fn respawn(
     spawn_q: Query<&Transform, (With<Spawnpoint>, Without<LogicalPlayer>)>,
     mut player_q: Query<(&mut Transform, &mut Velocity), (With<LogicalPlayer>, Without<Spawnpoint>)>,
-    mut etime: ResMut<EnvironmentTime>,
+   // mut etime: ResMut<EnvironmentTime>,
 ) {
     let spawn = spawn_q.single();
     let (mut player_trans, mut player_vel) = player_q.single_mut();
@@ -67,5 +115,16 @@ fn respawn(
     *player_trans = spawn.clone();
     *player_vel = Velocity::zero();
 
-    etime.time.reset();
+    //etime.time.reset();
+}
+
+fn fall_off(
+    player_q: Query<&Transform, With<LogicalPlayer>>,
+    mut ev: EventWriter<RespawnEvent>,
+) {
+    let player_transform = player_q.single();
+
+    if player_transform.translation.y <= -50. {
+        ev.send(RespawnEvent);
+    }
 }

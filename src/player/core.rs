@@ -4,17 +4,20 @@ use bevy::{core_pipeline::bloom::BloomSettings, prelude::*, window::CursorGrabMo
 use bevy_rapier3d::prelude::*;
 use bevy_fps_controller::controller::*;
 
-use crate::{common_assets::CommonAssets, environment::level_loading::LevelCleanup};
+use crate::{common_assets::CommonAssets, environment::{level_loading::{LevelCleanup, LevelLoaded}, spawn_cycle::EndLevelEvent}, GameState};
 
 use super::PlayerCamera;
 
-pub struct PlayerSpawnPlugin;
+pub struct PlayerCorePlugin;
 
-impl Plugin for PlayerSpawnPlugin {
+impl Plugin for PlayerCorePlugin {
     fn build(&self, app: &mut App) {
         app
-            .add_systems(Startup, initial_grab_cursor)
-            .add_systems(Update, manage_cursor);
+            .add_systems(Update, (
+                manage_cursor.run_if(|state: Res<GameState>| state.is_playing()),
+                initial_grab_cursor.run_if(|events: EventReader<LevelLoaded>| !events.is_empty()),
+                ungrab_cursor.run_if(|events: EventReader<EndLevelEvent>| !events.is_empty()),
+            ));
 
         #[cfg(target_arch = "wasm32")]
         app.insert_resource(Msaa::Off);
@@ -75,7 +78,7 @@ pub fn setup_player(
         LevelCleanup,
     ));
 
-    // crosshair
+    // crosshair (TODO probably move to ui module)
     let text_style = TextStyle {
         font: common_assets.times_new_roman.clone(),
         font_size: 25.,
@@ -125,4 +128,17 @@ fn initial_grab_cursor(
     let mut window = window_query.single_mut();
     window.cursor.grab_mode = CursorGrabMode::Locked;
     window.cursor.visible = false;
+}
+
+fn ungrab_cursor(
+    mut window_query: Query<&mut Window>,
+    mut controller_query: Query<&mut FpsController>,
+) {
+    let mut window = window_query.single_mut();
+
+    window.cursor.grab_mode = CursorGrabMode::None;
+    window.cursor.visible = true;
+    for mut controller in &mut controller_query {
+        controller.enable_input = false;
+    }
 }

@@ -16,6 +16,7 @@ impl PluginGroup for EnvironmentPlugins {
             .add(fx::FxPlugin)
             .add(level_loading::LevelLoadingPlugin)
             .add(jump_pad::JumpPadPlugin)
+            .add(spawn_cycle::SpawnCyclePlugin)
     }
 }
 

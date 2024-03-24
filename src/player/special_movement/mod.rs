@@ -7,7 +7,7 @@ use bevy::prelude::*;
 use bevy_fps_controller::controller::LogicalPlayer;
 use bevy_rapier3d::prelude::*;
 
-use crate::GameState;
+use crate::{environment::spawn_cycle::end_level, GameState};
 
 pub struct SpecialMovementPlugin;
 
@@ -17,13 +17,17 @@ impl Plugin for SpecialMovementPlugin {
         app
             .add_event::<PlayerEnactForceEvent>()
             .add_systems(Update, (
-                handle_player_enact_force_event.after(handle_explosions),
                 bomb::spawn_bomb.run_if(|inputs: Res<ButtonInput<KeyCode>>| inputs.just_pressed(KeyCode::KeyR)), // temp keybind
                 bomb::tick_bombs.after(crate::environment::fx::init_sfx),
-                handle_explosions,
-            )
-            .run_if(|state: Res<State<GameState>>| state.is_playing()),
-        );
+
+                (
+                    handle_explosions
+                        .after(end_level),
+                    handle_player_enact_force_event,
+                )
+                    .chain()
+                    .run_if(|state: Res<GameState>| state.is_playing()),
+            ));
     }
 }
 

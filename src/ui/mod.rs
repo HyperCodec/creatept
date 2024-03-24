@@ -1,5 +1,6 @@
 mod timer;
 mod level_browser;
+mod level_end;
 
 use bevy::{app::PluginGroupBuilder, prelude::*};
 
@@ -16,5 +17,6 @@ impl PluginGroup for UIPlugins {
         PluginGroupBuilder::start::<Self>()
             .add(timer::TimerUIPlugin)
             .add(level_browser::LevelBrowserPlugin)
+            .add(level_end::LevelEndUIPlugin)
     }
 }
