@@ -1,8 +1,10 @@
 mod player;
 mod environment;
-mod debug;
 mod ui;
 mod common_assets;
+
+#[cfg(feature = "debug")]
+mod debug;
 
 pub use creatept::GameState;
 pub use creatept::handle_empty_event;
@@ -21,6 +23,8 @@ fn main() {
             ..default()
         }),
         bevy_egui::EguiPlugin,
+
+        #[cfg(feature = "debug")]
         debug::DebugPlugins,
     ));
 

@@ -2,11 +2,13 @@ use bevy::prelude::*;
 use bevy_rapier3d::prelude::*;
 use bevy_hanabi::prelude::*;
 
-mod player;
-mod environment;
-mod debug;
-mod ui;
+pub mod player;
+pub mod environment;
+pub mod ui;
 pub mod common_assets;
+
+#[cfg(feature = "debug")]
+pub mod debug;
 
 #[derive(Resource, Default, PartialEq)]
 pub enum GameState {
