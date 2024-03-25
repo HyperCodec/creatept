@@ -14,8 +14,24 @@ impl Plugin for SpawnCyclePlugin {
             .add_event::<RespawnEvent>()
             .add_event::<EndLevelEvent>()
             .add_systems(Update, (
-                end_level.run_if(|mut ev: EventReader<EndLevelEvent>| ev.read().count() > 0),
-                respawn.run_if(|mut ev: EventReader<RespawnEvent>| ev.read().count() > 0),
+                end_level.run_if(|mut ev: EventReader<EndLevelEvent>| {
+                    let b = !ev.is_empty();
+
+                    if b {
+                        ev.clear();
+                    }
+
+                    b
+                }),
+                respawn.run_if(|mut ev: EventReader<RespawnEvent>| {
+                    let b = !ev.is_empty();
+
+                    if b {
+                        ev.clear();
+                    }
+
+                    b
+                }),
 
                 (
                     handle_collision_goal.before(end_level),

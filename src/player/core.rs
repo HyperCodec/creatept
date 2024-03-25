@@ -15,8 +15,24 @@ impl Plugin for PlayerCorePlugin {
         app
             .add_systems(Update, (
                 manage_cursor.run_if(|state: Res<GameState>| state.is_playing()),
-                initial_grab_cursor.run_if(|events: EventReader<LevelLoaded>| !events.is_empty()),
-                ungrab_cursor.run_if(|events: EventReader<EndLevelEvent>| !events.is_empty()),
+                initial_grab_cursor.run_if(|mut ev: EventReader<LevelLoaded>| {
+                    let b = !ev.is_empty();
+
+                    if b {
+                        ev.clear();
+                    }
+
+                    b
+                }),
+                ungrab_cursor.run_if(|mut ev: EventReader<EndLevelEvent>| {
+                    let b = !ev.is_empty();
+
+                    if b {
+                        ev.clear();
+                    }
+
+                    b
+                }),
             ));
 
         #[cfg(target_arch = "wasm32")]

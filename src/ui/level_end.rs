@@ -13,7 +13,15 @@ impl Plugin for LevelEndUIPlugin {
             .add_systems(Update, (
                 setup_level_end_ui
                     .after(end_level)
-                    .run_if(|mut ev: EventReader<EndLevelEvent>| ev.read().count() > 0),
+                    .run_if(|mut ev: EventReader<EndLevelEvent>| {
+                        let b = !ev.is_empty();
+    
+                        if b {
+                            ev.clear();
+                        }
+    
+                        b
+                    }),
                 handle_return_click
                     .run_if(|state: Res<GameState>| state.is_menu()),
             ));

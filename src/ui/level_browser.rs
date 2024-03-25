@@ -19,7 +19,15 @@ impl Plugin for LevelBrowserPlugin {
                     .run_if(|state: Res<GameState>| state.is_menu()),
                 setup
                     .before(handle_return_click)
-                    .run_if(|mut ev: EventReader<ReturnToMenuEvent>| ev.read().count() > 0),
+                    .run_if(|mut ev: EventReader<ReturnToMenuEvent>| {
+                        let b = !ev.is_empty();
+    
+                        if b {
+                            ev.clear();
+                        }
+    
+                        b
+                    }),
             ));
     }
 }

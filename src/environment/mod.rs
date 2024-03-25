@@ -28,7 +28,15 @@ impl Plugin for EnvironmentBasePlugin {
             .init_resource::<EnvironmentTime>()
             .add_systems(Update, (
                 tick_time.run_if(|etime: Res<EnvironmentTime>| etime.is_ticking),
-                start_timer.run_if(|events: EventReader<LevelLoaded>| !events.is_empty()),
+                start_timer.run_if(|mut ev: EventReader<LevelLoaded>| {
+                    let b = !ev.is_empty();
+
+                    if b {
+                        ev.clear();
+                    }
+
+                    b
+                }),
             ));
     }
 }
