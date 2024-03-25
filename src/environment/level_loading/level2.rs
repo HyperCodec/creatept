@@ -27,7 +27,7 @@ pub(super) fn load_level_2(
                 ..default()
             });
 
-            // TODO tutorial mesh for bomb spawning
+            // TODO tutorial text for bomb spawning
         }
     }
 }
