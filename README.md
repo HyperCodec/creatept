@@ -1,5 +1,5 @@
 # My CreatePT Project
-This project was made in a total of ~9 hours using Rust and the Bevy game engine.
+This project was made in a total of ~9 hours using Rust and the WIP Bevy game engine.
 
 My starting experience of Bevy (and gamedev in general) was very minimal (pretty much nothing aside from [a shader test](https://inflectrix.github.io/bevy-shader-test); the page may take a while to load, WASM/executables from Bevy are very large). In this project, I had to learn (self-taught off of textual documentation):
 - Bevy's event system
