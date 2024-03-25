@@ -26,5 +26,5 @@ fn display_timer(
 }
 
 pub fn timer_string(elapsed: Duration) -> String {
-    format!("Time: {}:{:.3}", elapsed.as_secs() / 60, elapsed.as_secs_f32() % 60.)
+    format!("Time: {:2.}:{:2.3}", elapsed.as_secs() / 60, elapsed.as_secs_f32() % 60.)
 }

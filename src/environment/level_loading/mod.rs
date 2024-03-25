@@ -1,12 +1,11 @@
 mod test_level;
 mod level1;
+mod level2;
 
 use bevy::prelude::*;
 use bevy_rapier3d::prelude::*;
 
 use crate::GameState;
-
-use super::EnvironmentTime;
 
 pub struct LevelLoadingPlugin;
 
@@ -23,7 +22,8 @@ impl Plugin for LevelLoadingPlugin {
 
                 (
                     test_level::load_test_level,
-                    level1::load_tutorial,
+                    level1::load_level_1,
+                    level2::load_level_2,
                 )
                     // could make all of this stuff into a chain statement but this allows me to put the bulky stuff last in the code
                     .after(load_level)
@@ -94,7 +94,6 @@ pub fn init_levels(
     asset_server: Res<AssetServer>,
     mut commands: Commands,
 ) {
-    // TODO load the actual scenes
     commands.insert_resource(LevelManager {
         current_level: 0,
         levels: vec![
@@ -103,8 +102,12 @@ pub fn init_levels(
                 scene: asset_server.load("scene/test.gltf#Scene0"),
             },
             Level {
-                name: "tutorial".to_string(),
+                name: "Level 1".to_string(),
                 scene: asset_server.load("scene/level1.gltf#Scene0"),
+            },
+            Level {
+                name: "Level 2".to_string(),
+                scene: asset_server.load("scene/level2.gltf#Scene0"),
             }
         ],
     });

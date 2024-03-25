@@ -29,7 +29,7 @@ pub(super) fn spawn_bomb(
 
     commands.spawn((
         Bomb {
-            timer: Timer::from_seconds(3., TimerMode::Once),
+            timer: Timer::from_seconds(2., TimerMode::Once),
         },
         RigidBody::Dynamic,
         Collider::ball(0.25),
@@ -71,8 +71,8 @@ pub(super) fn tick_bombs(
 
             commands.spawn(ExplosionBundle {
                 explosion: Explosion {
-                    radius: 10.,
-                    force: 25.,
+                    radius: 15.,
+                    force: 40.,
                 },
                 transform: Transform::from_translation(transform.translation - Vec3::Y * 0.5).into(),
                 ..default()

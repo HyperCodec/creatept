@@ -75,6 +75,7 @@ fn setup(
                         style: Style {
                             width: Val::Px(100.),
                             height: Val::Px(50.),
+                            justify_content: JustifyContent::Center,
                             align_items: AlignItems::Center,
                             ..default()
                         },

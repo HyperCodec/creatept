@@ -17,7 +17,7 @@ impl Plugin for SpecialMovementPlugin {
         app
             .add_event::<PlayerEnactForceEvent>()
             .add_systems(Update, (
-                bomb::spawn_bomb.run_if(|inputs: Res<ButtonInput<KeyCode>>| inputs.just_pressed(KeyCode::KeyR)), // temp keybind
+                bomb::spawn_bomb.run_if(|inputs: Res<ButtonInput<KeyCode>>| inputs.just_pressed(KeyCode::KeyR)),
                 bomb::tick_bombs.after(crate::environment::fx::init_sfx),
 
                 (

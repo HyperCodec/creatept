@@ -62,7 +62,7 @@ fn setup_level_end_ui(
     ))
         .with_children(|parent| {
             parent.spawn(TextBundle::from_section(
-                format!("Level Complete\n{}", timer_string(etime.time.elapsed())),
+                format!("Level Complete!\n{}", timer_string(etime.time.elapsed())),
                 text_style.clone(),
             ));
 
