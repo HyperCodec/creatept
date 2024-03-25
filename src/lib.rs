@@ -43,3 +43,18 @@ pub fn apply_game_plugins(mut app: App) -> App {
 
     app
 }
+
+#[macro_export]
+macro_rules! handle_empty_event {
+    ($S: expr, $T: ty) => {
+        $S.run_if(|mut ev: EventReader<$T>| {
+            let b = !ev.is_empty();
+
+            if b {
+                ev.clear();
+            }
+
+            b
+        })
+    };
+}

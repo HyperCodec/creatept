@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-use crate::{common_assets::{self, CommonAssets}, environment::level_loading::{LevelCleanup, LevelLoadRequest, LevelManager}, GameState};
+use crate::{common_assets::{self, CommonAssets}, environment::level_loading::{LevelCleanup, LevelLoadRequest, LevelManager}, handle_empty_event, GameState};
 
 use self::level_end::handle_return_click;
 
@@ -17,17 +17,8 @@ impl Plugin for LevelBrowserPlugin {
             .add_systems(Update, (
                 handle_load_click
                     .run_if(|state: Res<GameState>| state.is_menu()),
-                setup
-                    .before(handle_return_click)
-                    .run_if(|mut ev: EventReader<ReturnToMenuEvent>| {
-                        let b = !ev.is_empty();
-    
-                        if b {
-                            ev.clear();
-                        }
-    
-                        b
-                    }),
+                handle_empty_event!(setup
+                    .before(handle_return_click), ReturnToMenuEvent),
             ));
     }
 }

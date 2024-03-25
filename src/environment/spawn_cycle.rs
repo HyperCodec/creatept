@@ -2,7 +2,7 @@ use bevy::prelude::*;
 use bevy_fps_controller::controller::LogicalPlayer;
 use bevy_rapier3d::prelude::*;
 
-use crate::{environment::level_loading::cleanup, GameState};
+use crate::{environment::level_loading::cleanup, handle_empty_event, GameState};
 
 use super::{level_loading::LevelCleanup, EnvironmentTime};
 
@@ -14,24 +14,8 @@ impl Plugin for SpawnCyclePlugin {
             .add_event::<RespawnEvent>()
             .add_event::<EndLevelEvent>()
             .add_systems(Update, (
-                end_level.run_if(|mut ev: EventReader<EndLevelEvent>| {
-                    let b = !ev.is_empty();
-
-                    if b {
-                        ev.clear();
-                    }
-
-                    b
-                }),
-                respawn.run_if(|mut ev: EventReader<RespawnEvent>| {
-                    let b = !ev.is_empty();
-
-                    if b {
-                        ev.clear();
-                    }
-
-                    b
-                }),
+                handle_empty_event!(end_level, EndLevelEvent),
+                handle_empty_event!(respawn, RespawnEvent),
 
                 (
                     handle_collision_goal.before(end_level),
@@ -138,9 +122,9 @@ fn fall_off(
     player_q: Query<&Transform, With<LogicalPlayer>>,
     mut ev: EventWriter<RespawnEvent>,
 ) {
-    let player_transform = player_q.single();
-
-    if player_transform.translation.y <= -50. {
-        ev.send(RespawnEvent);
+    for player_transform in player_q.iter() {
+        if player_transform.translation.y <= -50. {
+            ev.send(RespawnEvent);
+        }
     }
 }

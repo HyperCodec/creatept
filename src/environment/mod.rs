@@ -7,6 +7,8 @@ use bevy::{app::PluginGroupBuilder, prelude::*, time::Stopwatch};
 
 use level_loading::LevelLoaded;
 
+use crate::handle_empty_event;
+
 pub struct EnvironmentPlugins;
 
 impl PluginGroup for EnvironmentPlugins {
@@ -28,15 +30,7 @@ impl Plugin for EnvironmentBasePlugin {
             .init_resource::<EnvironmentTime>()
             .add_systems(Update, (
                 tick_time.run_if(|etime: Res<EnvironmentTime>| etime.is_ticking),
-                start_timer.run_if(|mut ev: EventReader<LevelLoaded>| {
-                    let b = !ev.is_empty();
-
-                    if b {
-                        ev.clear();
-                    }
-
-                    b
-                }),
+                handle_empty_event!(start_timer, LevelLoaded),
             ));
     }
 }

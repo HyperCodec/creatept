@@ -4,7 +4,7 @@ use bevy::{core_pipeline::bloom::BloomSettings, prelude::*, window::CursorGrabMo
 use bevy_rapier3d::prelude::*;
 use bevy_fps_controller::controller::*;
 
-use crate::{common_assets::CommonAssets, environment::{level_loading::{LevelCleanup, LevelLoaded}, spawn_cycle::EndLevelEvent}, GameState};
+use crate::{common_assets::CommonAssets, environment::{level_loading::{LevelCleanup, LevelLoaded}, spawn_cycle::EndLevelEvent}, handle_empty_event, GameState};
 
 use super::PlayerCamera;
 
@@ -15,24 +15,8 @@ impl Plugin for PlayerCorePlugin {
         app
             .add_systems(Update, (
                 manage_cursor.run_if(|state: Res<GameState>| state.is_playing()),
-                initial_grab_cursor.run_if(|mut ev: EventReader<LevelLoaded>| {
-                    let b = !ev.is_empty();
-
-                    if b {
-                        ev.clear();
-                    }
-
-                    b
-                }),
-                ungrab_cursor.run_if(|mut ev: EventReader<EndLevelEvent>| {
-                    let b = !ev.is_empty();
-
-                    if b {
-                        ev.clear();
-                    }
-
-                    b
-                }),
+                handle_empty_event!(initial_grab_cursor, LevelLoaded),
+                handle_empty_event!(ungrab_cursor, EndLevelEvent),
             ));
 
         #[cfg(target_arch = "wasm32")]

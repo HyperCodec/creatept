@@ -1,5 +1,5 @@
 use bevy::prelude::*;
-use crate::{common_assets::CommonAssets, environment::{level_loading::{cleanup, LevelCleanup}, spawn_cycle::{end_level, EndLevelEvent}, EnvironmentTime}, GameState};
+use crate::{common_assets::CommonAssets, environment::{level_loading::{cleanup, LevelCleanup}, spawn_cycle::{end_level, EndLevelEvent}, EnvironmentTime}, handle_empty_event, GameState};
 
 use self::{level_browser::ReturnToMenuEvent, timer::timer_string};
 
@@ -11,17 +11,8 @@ impl Plugin for LevelEndUIPlugin {
     fn build(&self, app: &mut App) {
         app
             .add_systems(Update, (
-                setup_level_end_ui
-                    .after(end_level)
-                    .run_if(|mut ev: EventReader<EndLevelEvent>| {
-                        let b = !ev.is_empty();
-    
-                        if b {
-                            ev.clear();
-                        }
-    
-                        b
-                    }),
+                handle_empty_event!(setup_level_end_ui
+                    .after(end_level), EndLevelEvent),
                 handle_return_click
                     .run_if(|state: Res<GameState>| state.is_menu()),
             ));

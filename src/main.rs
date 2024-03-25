@@ -5,6 +5,8 @@ mod ui;
 mod common_assets;
 
 pub use creatept::GameState;
+pub use creatept::handle_empty_event;
+
 use bevy::prelude::*;
 
 fn main() {

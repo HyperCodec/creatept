@@ -1,6 +1,7 @@
 mod test_level;
 mod level1;
 mod level2;
+mod level3;
 
 use bevy::prelude::*;
 use bevy_rapier3d::prelude::*;
@@ -24,6 +25,7 @@ impl Plugin for LevelLoadingPlugin {
                     test_level::load_test_level,
                     level1::load_level_1,
                     level2::load_level_2,
+                    level3::load_level_3,
                 )
                     // could make all of this stuff into a chain statement but this allows me to put the bulky stuff last in the code
                     .after(load_level)
@@ -102,13 +104,17 @@ pub fn init_levels(
                 scene: asset_server.load("scene/test.gltf#Scene0"),
             },
             Level {
-                name: "Level 1".to_string(),
+                name: "Simple Jumps".to_string(),
                 scene: asset_server.load("scene/level1.gltf#Scene0"),
             },
             Level {
-                name: "Level 2".to_string(),
+                name: "Bomb Jump".to_string(),
                 scene: asset_server.load("scene/level2.gltf#Scene0"),
-            }
+            },
+            Level {
+                name: "Multibomb Jump".to_string(),
+                scene: asset_server.load("scene/level3.gltf#Scene0"),
+            },
         ],
     });
 }
