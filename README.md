@@ -12,6 +12,13 @@ My starting experience of Bevy (and gamedev in general) was very minimal (pretty
 
 And much more, all within the span of ~9 hours of development time (albeit drawn out to fit within 40min periods) to produce a playable/presentable game.
 
+### Controls
+- Mouse Movement - Aim
+- WASD - Basic movement
+- Shift - Sprint (also more airdrift when airborne)
+- Ctrl - Crouch
+- R - Spawn bomb (inherits player velocity, used to launch the player by positioning oneself near the bomb when it explodes)
+
 ### Asset Sources
 You can find any asset sources I used [here](/assets/credits.txt)
 
