@@ -31,6 +31,7 @@ fn despawn_after_time(
 #[derive(Resource)]
 pub struct Sfx {
     pub explosion: Handle<AudioSource>,
+    pub fail: Handle<AudioSource>,
 }
 
 pub fn init_sfx(
@@ -38,5 +39,7 @@ pub fn init_sfx(
     mut commands: Commands,
 ) {
     let explosion = asset_server.load("sfx/explosion.ogg");
-    commands.insert_resource(Sfx { explosion });
+    let fail = asset_server.load("sfx/fail.ogg");
+    
+    commands.insert_resource(Sfx { explosion, fail });
 }

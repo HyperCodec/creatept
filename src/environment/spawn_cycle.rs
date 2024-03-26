@@ -4,7 +4,7 @@ use bevy_rapier3d::prelude::*;
 
 use crate::{environment::level_loading::cleanup, handle_empty_event, GameState};
 
-use super::{level_loading::LevelCleanup, EnvironmentTime};
+use super::{fx::{DespawnAfterTime, Sfx}, level_loading::LevelCleanup, EnvironmentTime};
 
 pub struct SpawnCyclePlugin;
 
@@ -105,17 +105,28 @@ pub fn end_level(
 pub struct RespawnEvent;
 
 fn respawn(
+    sfx: Res<Sfx>,
     spawn_q: Query<&Transform, (With<Spawnpoint>, Without<LogicalPlayer>)>,
-    mut player_q: Query<(&mut Transform, &mut Velocity), (With<LogicalPlayer>, Without<Spawnpoint>)>,
-   // mut etime: ResMut<EnvironmentTime>,
+    mut player_q: Query<(Entity, &mut Transform, &mut Velocity), (With<LogicalPlayer>, Without<Spawnpoint>)>,
+    mut commands: Commands,
 ) {
     let spawn = spawn_q.single();
-    let (mut player_trans, mut player_vel) = player_q.single_mut();
+    let (entity, mut player_trans, mut player_vel) = player_q.single_mut();
 
     *player_trans = spawn.clone();
     *player_vel = Velocity::zero();
 
-    //etime.time.reset();
+    commands.entity(entity).with_children(|parent| {
+        parent.spawn((
+            AudioBundle {
+                source: sfx.fail.clone(),
+                ..default()
+            },
+            DespawnAfterTime {
+                timer: Timer::from_seconds(1., TimerMode::Once),
+            },
+        ));
+    });
 }
 
 fn fall_off(
