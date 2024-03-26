@@ -16,6 +16,14 @@ pub(super) fn load_level_3(
                 transform: Transform::from_xyz(0., 0.1, 0.).into(),
                 ..default()
             });
+
+            commands.spawn(GoalBundle {
+                goal: Goal {
+                    size: 4.5,
+                },
+                transform: TransformBundle::from_transform(Transform::from_xyz(25., 45., 0.)),
+                ..default()
+            });
         }
     }
 }
