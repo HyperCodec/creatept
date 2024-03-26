@@ -23,9 +23,10 @@ pub(super) fn spawn_bomb(
     let cam_transform = cam_q.single();
 
     let direction = cam_transform.forward().normalize();
-    let force = direction * 10.;
+    let force = direction * 5.;
 
     let bomb_linvel = player_velocity.linvel + force;
+    let bomb_pos = cam_transform.translation + direction * Vec3::new(1., 0., 1.) * 0.5;
 
     commands.spawn((
         Bomb {
@@ -36,7 +37,7 @@ pub(super) fn spawn_bomb(
         PbrBundle {
             mesh: meshes.add(Mesh::from(Sphere { radius: 0.25 })),
             material: materials.add(StandardMaterial::from(Color::rgb(0.5, 0.5, 0.5))),
-            transform: Transform::from_translation(cam_transform.translation - Vec3::Y * 0.1),
+            transform: Transform::from_translation(bomb_pos),
             ..default()
         },
         Velocity {
