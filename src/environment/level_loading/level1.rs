@@ -22,7 +22,7 @@ pub(super) fn load_level_1(
 
             commands.spawn(GoalBundle::new(
                 4.,
-                Transform::from_xyz(20., 5., 0.),
+                Transform::from_xyz(20., 4.5, 0.),
                 &mut effects,
             ));
         }

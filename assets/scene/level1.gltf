@@ -10,31 +10,11 @@
             "nodes" : [
                 0,
                 1,
-                2,
-                3
+                2
             ]
         }
     ],
     "nodes" : [
-        {
-            "name" : "Light",
-            "rotation" : [
-                0.16907575726509094,
-                0.7558803558349609,
-                -0.27217137813568115,
-                0.570947527885437
-            ],
-            "scale" : [
-                2.4839580059051514,
-                1.7061541080474854,
-                2.071394920349121
-            ],
-            "translation" : [
-                10.157373428344727,
-                16.33682632446289,
-                -2.5335447788238525
-            ]
-        },
         {
             "mesh" : 0,
             "name" : "Cube.001",
@@ -51,7 +31,7 @@
         },
         {
             "mesh" : 1,
-            "name" : "Cube",
+            "name" : "Cube.002",
             "scale" : [
                 3.730703115463257,
                 0.260111004114151,
@@ -64,34 +44,18 @@
             ]
         },
         {
-            "mesh" : 2,
-            "name" : "Cube.002",
-            "scale" : [
-                3.730703115463257,
-                0.260111004114151,
-                3.730703115463257
+            "name" : "Light",
+            "rotation" : [
+                0.16907575726509094,
+                0.7558803558349609,
+                -0.27217137813568115,
+                0.570947527885437
             ],
             "translation" : [
-                20.254470825195312,
-                1.5950326919555664,
-                -0.03284469246864319
+                4.076245307922363,
+                11.555255889892578,
+                -1.0054539442062378
             ]
-        }
-    ],
-    "materials" : [
-        {
-            "doubleSided" : true,
-            "name" : "Material.002",
-            "pbrMetallicRoughness" : {
-                "baseColorFactor" : [
-                    0.011599179357290268,
-                    0.8000035881996155,
-                    0,
-                    1
-                ],
-                "metallicFactor" : 0,
-                "roughnessFactor" : 0.5
-            }
         }
     ],
     "meshes" : [
@@ -118,20 +82,6 @@
                         "TEXCOORD_0" : 6
                     },
                     "indices" : 3
-                }
-            ]
-        },
-        {
-            "name" : "Cube.005",
-            "primitives" : [
-                {
-                    "attributes" : {
-                        "POSITION" : 7,
-                        "NORMAL" : 8,
-                        "TEXCOORD_0" : 9
-                    },
-                    "indices" : 3,
-                    "material" : 0
                 }
             ]
         }
@@ -198,34 +148,6 @@
             "componentType" : 5126,
             "count" : 14,
             "type" : "VEC2"
-        },
-        {
-            "bufferView" : 7,
-            "componentType" : 5126,
-            "count" : 14,
-            "max" : [
-                1,
-                1,
-                1
-            ],
-            "min" : [
-                -1,
-                -1,
-                -1
-            ],
-            "type" : "VEC3"
-        },
-        {
-            "bufferView" : 8,
-            "componentType" : 5126,
-            "count" : 14,
-            "type" : "VEC3"
-        },
-        {
-            "bufferView" : 9,
-            "componentType" : 5126,
-            "count" : 14,
-            "type" : "VEC2"
         }
     ],
     "bufferViews" : [
@@ -263,27 +185,12 @@
             "buffer" : 0,
             "byteLength" : 112,
             "byteOffset" : 856
-        },
-        {
-            "buffer" : 0,
-            "byteLength" : 168,
-            "byteOffset" : 968
-        },
-        {
-            "buffer" : 0,
-            "byteLength" : 168,
-            "byteOffset" : 1136
-        },
-        {
-            "buffer" : 0,
-            "byteLength" : 112,
-            "byteOffset" : 1304
         }
     ],
     "buffers" : [
         {
-            "byteLength" : 1416,
-            "uri" : "data:application/octet-stream;base64,AACAvwAAgL8AAIA/AACAvwAAgL8AAIA/AACAvwAAgL8AAIA/AACAvwAAgD8AAIA/AACAvwAAgD8AAIA/AACAvwAAgD8AAIA/AACAvwAAgL8AAIC/AACAvwAAgL8AAIC/AACAvwAAgD8AAIC/AACAvwAAgD8AAIC/AACAPwAAgL8AAIA/AACAPwAAgD8AAIA/AACAPwAAgL8AAIC/AACAPwAAgD8AAIC/KM0TvyjNE78ozRM/KM0TvyjNE78ozRM/KM0TvyjNE78ozRM/KM0TvyjNEz8ozRM/KM0TvyjNEz8ozRM/KM0TvyjNEz8ozRM/KM0TvyjNE78ozRO/KM0TvyjNE78ozRO/KM0TvyjNEz8ozRO/KM0TvyjNEz8ozRO/KM0TPyjNE78ozRM/KM0TPyjNEz8ozRM/KM0TPyjNE78ozRO/KM0TPyjNEz8ozRO/AAAAPgAAgD4AAMA+AAAAAAAAwD4AAIA/AAAgPwAAAAAAACA/AACAPwAAYD8AAIA+AAAAPgAAAD8AAMA+AABAPwAAID8AAEA/AABgPwAAAD8AAMA+AACAPgAAID8AAIA+AADAPgAAAD8AACA/AAAAPwIABAAIAAIACAAHAAcACAANAAcADQAMAAwADQALAAwACwAKAAoACwADAAoAAwABAAYADAAKAAYACgAAAA0ACQAFAA0ABQALAAAAgL8AAIC/AACAPwAAgL8AAIC/AACAPwAAgL8AAIC/AACAPwAAgL8AAIA/AACAPwAAgL8AAIA/AACAPwAAgL8AAIA/AACAPwAAgL8AAIC/AACAvwAAgL8AAIC/AACAvwAAgL8AAIA/AACAvwAAgL8AAIA/AACAvwAAgD8AAIC/AACAPwAAgD8AAIA/AACAPwAAgD8AAIC/AACAvwAAgD8AAIA/AACAvyjNE78ozRO/KM0TPyjNE78ozRO/KM0TPyjNE78ozRO/KM0TPyjNE78ozRM/KM0TPyjNE78ozRM/KM0TPyjNE78ozRM/KM0TPyjNE78ozRO/KM0TvyjNE78ozRO/KM0TvyjNE78ozRM/KM0TvyjNE78ozRM/KM0TvyjNEz8ozRO/KM0TPyjNEz8ozRM/KM0TPyjNEz8ozRO/KM0TvyjNEz8ozRM/KM0TvwAAAD4AAIA+AADAPgAAAAAAAMA+AACAPwAAID8AAAAAAAAgPwAAgD8AAGA/AACAPgAAAD4AAAA/AADAPgAAQD8AACA/AABAPwAAYD8AAAA/AADAPgAAgD4AACA/AACAPgAAwD4AAAA/AAAgPwAAAD8AAIC/AACAvwAAgD8AAIC/AACAvwAAgD8AAIC/AACAvwAAgD8AAIC/AACAPwAAgD8AAIC/AACAPwAAgD8AAIC/AACAPwAAgD8AAIC/AACAvwAAgL8AAIC/AACAvwAAgL8AAIC/AACAPwAAgL8AAIC/AACAPwAAgL8AAIA/AACAvwAAgD8AAIA/AACAPwAAgD8AAIA/AACAvwAAgL8AAIA/AACAPwAAgL8ozRO/KM0TvyjNEz8ozRO/KM0TvyjNEz8ozRO/KM0TvyjNEz8ozRO/KM0TPyjNEz8ozRO/KM0TPyjNEz8ozRO/KM0TPyjNEz8ozRO/KM0TvyjNE78ozRO/KM0TvyjNE78ozRO/KM0TPyjNE78ozRO/KM0TPyjNE78ozRM/KM0TvyjNEz8ozRM/KM0TPyjNEz8ozRM/KM0TvyjNE78ozRM/KM0TPyjNE78AAAA+AACAPgAAwD4AAAAAAADAPgAAgD8AACA/AAAAAAAAID8AAIA/AABgPwAAgD4AAAA+AAAAPwAAwD4AAEA/AAAgPwAAQD8AAGA/AAAAPwAAwD4AAIA+AAAgPwAAgD4AAMA+AAAAPwAAID8AAAA/"
+            "byteLength" : 968,
+            "uri" : "data:application/octet-stream;base64,AACAvwAAgL8AAIA/AACAvwAAgL8AAIA/AACAvwAAgL8AAIA/AACAvwAAgD8AAIA/AACAvwAAgD8AAIA/AACAvwAAgD8AAIA/AACAvwAAgL8AAIC/AACAvwAAgL8AAIC/AACAvwAAgD8AAIC/AACAvwAAgD8AAIC/AACAPwAAgL8AAIA/AACAPwAAgD8AAIA/AACAPwAAgL8AAIC/AACAPwAAgD8AAIC/7c8Tv0fNE797yhM/e8oTv+3PE79HzRM/R80Tv3vKE7/tzxM/7c8Tv3vKEz9HzRM/R80Tv+3PEz97yhM/e8oTv0fNEz/tzxM/e8oTv0fNE7/tzxO/gs0Tv2zME7/AzRO/wM0Tv2zMEz+CzRO/7c8Tv0fNEz97yhO/O80TPzvNE787zRM/O80TPzvNEz87zRM/O80TPzvNE787zRO/O80TPzvNEz87zRO/AAAAPgAAgD4AAMA+AAAAAAAAwD4AAIA/AAAgPwAAAAAAACA/AACAPwAAYD8AAIA+AAAAPgAAAD8AAMA+AABAPwAAID8AAEA/AABgPwAAAD8AAMA+AACAPgAAID8AAIA+AADAPgAAAD8AACA/AAAAPwIABAAIAAIACAAHAAcACAANAAcADQAMAAwADQALAAwACwAKAAoACwADAAoAAwABAAYADAAKAAYACgAAAA0ACQAFAA0ABQALAAAAgL8AAIC/AACAPwAAgL8AAIC/AACAPwAAgL8AAIC/AACAPwAAgL8AAIA/AACAPwAAgL8AAIA/AACAPwAAgL8AAIA/AACAPwAAgL8AAIC/AACAvwAAgL8AAIC/AACAvwAAgL8AAIA/AACAvwAAgL8AAIA/AACAvwAAgD8AAIC/AACAPwAAgD8AAIA/AACAPwAAgD8AAIC/AACAvwAAgD8AAIA/AACAv+3PE79HzRO/e8oTP3vKE7/tzxO/R80TP0fNE797yhO/7c8TP+3PE797yhM/R80TP0fNE7/tzxM/e8oTP3vKE79HzRM/7c8TP3vKE79HzRO/7c8Tv4LNE79szBO/wM0Tv8DNE79szBM/gs0Tv+3PE79HzRM/e8oTvzvNEz87zRO/O80TPzvNEz87zRM/O80TPzvNEz87zRO/O80TvzvNEz87zRM/O80TvwAAAD4AAIA+AADAPgAAAAAAAMA+AACAPwAAID8AAAAAAAAgPwAAgD8AAGA/AACAPgAAAD4AAAA/AADAPgAAQD8AACA/AABAPwAAYD8AAAA/AADAPgAAgD4AACA/AACAPgAAwD4AAAA/AAAgPwAAAD8="
         }
     ]
 }
