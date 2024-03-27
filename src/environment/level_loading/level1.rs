@@ -1,5 +1,6 @@
 use bevy::prelude::*;
-use crate::{common_assets::CommonAssets, environment::spawn_cycle::{Goal, GoalBundle, SpawnpointBundle}, player::core::setup_player};
+use crate::{common_assets::CommonAssets, environment::spawn_cycle::{GoalBundle, SpawnpointBundle}, player::core::setup_player};
+use bevy_hanabi::prelude::*;
 
 use super::LevelLoaded;
 
@@ -7,6 +8,7 @@ pub(super) fn load_level_1(
     common_assets: Res<CommonAssets>,
     mut events: EventReader<LevelLoaded>,
     mut commands: Commands,
+    mut effects: ResMut<Assets<EffectAsset>>,
 ) {
     for e in events.read() {
         if e.level == 1 {
@@ -18,13 +20,11 @@ pub(super) fn load_level_1(
                 ..default()
             });
 
-            commands.spawn(GoalBundle {
-                goal: Goal {
-                    size: 5.,
-                },
-                transform: Transform::from_xyz(20., 5., 0.).into(),
-                ..default()
-            });
+            commands.spawn(GoalBundle::new(
+                4.,
+                Transform::from_xyz(20., 5., 0.),
+                &mut effects,
+            ));
         }
     }
 }
