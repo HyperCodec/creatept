@@ -6,6 +6,11 @@ license = "MIT"
 authors = ["Inflectrix"]
 default-run = "creatept"
 
+[features]
+default = []
+debug = ["dep:bevy-inspector-egui", "bevy_rapier3d/debug-render"]
+editor = ["dep:bevy_editor_pls"]
+
 [profile.dev]
 opt-level = 1
 
@@ -14,9 +19,13 @@ opt-level = 3
 
 [dependencies]
 bevy = "0.13.0"
-bevy-inspector-egui = "0.23.3"
-bevy_editor_pls = "0.8.1"
+bevy-inspector-egui = { version = "0.23.3", optional = true }
+bevy_editor_pls = { version = "0.8.1", optional = true }
 bevy_egui = "0.26.0"
 bevy_fps_controller = "0.2.5"
 bevy_hanabi = "0.10.0"
-bevy_rapier3d = { version = "0.25.0", features = ["debug-render"] }
+bevy_rapier3d = "0.25.0"
+
+[[bin]]
+name = "editor"
+required-features = ["editor"]
