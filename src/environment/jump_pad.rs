@@ -10,12 +10,15 @@ pub struct JumpPadPlugin;
 
 impl Plugin for JumpPadPlugin {
     fn build(&self, app: &mut App) {
-        app
-            .add_systems(Update, (
-                jump_pad.after(tick_jump_pad_cooldowns)
+        app.add_systems(
+            Update,
+            (
+                jump_pad
+                    .after(tick_jump_pad_cooldowns)
                     .run_if(|state: Res<GameState>| state.is_playing()),
                 tick_jump_pad_cooldowns,
-            ));
+            ),
+        );
     }
 }
 
@@ -68,7 +71,7 @@ fn jump_pad(
 
                 if jump_pad.cooldown.finished() {
                     jump_pad.cooldown.reset();
-    
+
                     player_vel.linvel += jump_pad.force.linvel;
                 }
             }
@@ -76,10 +79,7 @@ fn jump_pad(
     }
 }
 
-fn tick_jump_pad_cooldowns(
-    time: Res<Time>,
-    mut jump_pad_q: Query<&mut JumpPad>,
-) {
+fn tick_jump_pad_cooldowns(time: Res<Time>, mut jump_pad_q: Query<&mut JumpPad>) {
     let dt = time.delta();
 
     for mut jump_pad in jump_pad_q.iter_mut() {

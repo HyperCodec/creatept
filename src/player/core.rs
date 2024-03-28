@@ -1,10 +1,17 @@
 use std::f32::consts::TAU;
 
 use bevy::{core_pipeline::bloom::BloomSettings, prelude::*, window::CursorGrabMode};
-use bevy_rapier3d::prelude::*;
 use bevy_fps_controller::controller::*;
+use bevy_rapier3d::prelude::*;
 
-use crate::{common_assets::CommonAssets, environment::{level_loading::{LevelCleanup, LevelLoaded}, spawn_cycle::EndLevelEvent}, handle_empty_event, GameState};
+use crate::{
+    common_assets::CommonAssets,
+    environment::{
+        level_loading::{LevelCleanup, LevelLoaded},
+        spawn_cycle::EndLevelEvent,
+    },
+    handle_empty_event, GameState,
+};
 
 use super::PlayerCamera;
 
@@ -12,23 +19,21 @@ pub struct PlayerCorePlugin;
 
 impl Plugin for PlayerCorePlugin {
     fn build(&self, app: &mut App) {
-        app
-            .add_systems(Update, (
+        app.add_systems(
+            Update,
+            (
                 manage_cursor.run_if(|state: Res<GameState>| state.is_playing()),
                 handle_empty_event!(initial_grab_cursor, LevelLoaded),
                 handle_empty_event!(ungrab_cursor, EndLevelEvent),
-            ));
+            ),
+        );
 
         #[cfg(target_arch = "wasm32")]
         app.insert_resource(Msaa::Off);
     }
 }
 
-pub fn setup_player(
-    common_assets: &Res<CommonAssets>,
-    commands: &mut Commands,
-    pos: Transform,
-) {
+pub fn setup_player(common_assets: &Res<CommonAssets>, commands: &mut Commands, pos: Transform) {
     let logical_entity = commands
         .spawn((
             Collider::capsule(Vec3::ZERO, Vec3::Y, 0.25),
@@ -83,19 +88,20 @@ pub fn setup_player(
         font: common_assets.times_new_roman.clone(),
         font_size: 25.,
         color: Color::Rgba {
-            red: 1., 
-            green: 1., 
+            red: 1.,
+            green: 1.,
             blue: 1.,
-            alpha: 0.5
+            alpha: 0.5,
         },
     };
 
-    commands.spawn(TextBundle::from_section("+", text_style).with_style(Style {
-        position_type: PositionType::Absolute,
-        top: Val::Percent(50.),
-        left: Val::Percent(50.),
-        ..default()
-    }))
+    commands
+        .spawn(TextBundle::from_section("+", text_style).with_style(Style {
+            position_type: PositionType::Absolute,
+            top: Val::Percent(50.),
+            left: Val::Percent(50.),
+            ..default()
+        }))
         .insert(LevelCleanup);
 }
 
@@ -122,9 +128,7 @@ fn manage_cursor(
     }
 }
 
-fn initial_grab_cursor(
-    mut window_query: Query<&mut Window>,
-) {
+fn initial_grab_cursor(mut window_query: Query<&mut Window>) {
     let mut window = window_query.single_mut();
     window.cursor.grab_mode = CursorGrabMode::Locked;
     window.cursor.visible = false;

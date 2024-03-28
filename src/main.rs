@@ -1,17 +1,17 @@
-mod player;
-mod environment;
-mod debug;
-mod ui;
 mod common_assets;
+mod debug;
+mod environment;
+mod player;
+mod ui;
 
-pub use creatept::GameState;
 pub use creatept::handle_empty_event;
+pub use creatept::GameState;
 
 use bevy::prelude::*;
 
 fn main() {
     let mut app = App::new();
-        
+
     app.add_plugins((
         DefaultPlugins.set(WindowPlugin {
             primary_window: Some(Window {
@@ -25,6 +25,6 @@ fn main() {
     ));
 
     app = creatept::apply_game_plugins(app);
-    
+
     app.run();
 }

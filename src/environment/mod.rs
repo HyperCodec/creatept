@@ -1,7 +1,7 @@
-pub mod spawn_cycle;
 pub mod fx;
-pub mod level_loading;
 pub mod jump_pad;
+pub mod level_loading;
+pub mod spawn_cycle;
 
 use bevy::{app::PluginGroupBuilder, prelude::*, time::Stopwatch};
 
@@ -26,12 +26,13 @@ struct EnvironmentBasePlugin;
 
 impl Plugin for EnvironmentBasePlugin {
     fn build(&self, app: &mut App) {
-        app
-            .init_resource::<EnvironmentTime>()
-            .add_systems(Update, (
+        app.init_resource::<EnvironmentTime>().add_systems(
+            Update,
+            (
                 tick_time.run_if(|etime: Res<EnvironmentTime>| etime.is_ticking),
                 handle_empty_event!(start_timer, LevelLoaded),
-            ));
+            ),
+        );
     }
 }
 
@@ -41,16 +42,11 @@ pub struct EnvironmentTime {
     pub is_ticking: bool,
 }
 
-fn tick_time(
-    time: Res<Time>,
-    mut etime: ResMut<EnvironmentTime>,
-) {
+fn tick_time(time: Res<Time>, mut etime: ResMut<EnvironmentTime>) {
     etime.time.tick(time.delta());
 }
 
-fn start_timer(
-    mut timer: ResMut<EnvironmentTime>,
-) {
+fn start_timer(mut timer: ResMut<EnvironmentTime>) {
     timer.time.reset();
     timer.is_ticking = true;
 }

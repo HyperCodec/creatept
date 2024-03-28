@@ -1,6 +1,6 @@
-mod timer;
 mod level_browser;
 mod level_end;
+mod timer;
 
 use bevy::{app::PluginGroupBuilder, prelude::*};
 

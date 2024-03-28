@@ -4,8 +4,7 @@ pub struct AssetsLoaderPlugin;
 
 impl Plugin for AssetsLoaderPlugin {
     fn build(&self, app: &mut App) {
-        app
-            .add_systems(Startup, init_assets);
+        app.add_systems(Startup, init_assets);
     }
 }
 
@@ -14,11 +13,8 @@ pub struct CommonAssets {
     pub times_new_roman: Handle<Font>,
 }
 
-pub(crate) fn init_assets(
-    asset_server: Res<AssetServer>,
-    mut commands: Commands,
-) {
+pub(crate) fn init_assets(asset_server: Res<AssetServer>, mut commands: Commands) {
     commands.insert_resource(CommonAssets {
-        times_new_roman: asset_server.load("font/OPTITimes-Roman.otf")
+        times_new_roman: asset_server.load("font/OPTITimes-Roman.otf"),
     });
 }

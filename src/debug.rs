@@ -20,29 +20,27 @@ pub struct DebugPlugin;
 
 impl Plugin for DebugPlugin {
     fn build(&self, app: &mut App) {
-        app
-            .init_resource::<DebugEnabled>()
-            .add_systems(Update, (
-                    toggle_debug.run_if(|inputs: Res<ButtonInput<KeyCode>>| inputs.just_pressed(KeyCode::F7)),
-                    inspector_ui.run_if(|debug_mode: Res<DebugEnabled>| debug_mode.0),
-                    toggle_physics_debug.run_if(|inputs: Res<ButtonInput<KeyCode>>| inputs.just_pressed(KeyCode::F8)),
-                ));
+        app.init_resource::<DebugEnabled>().add_systems(
+            Update,
+            (
+                toggle_debug
+                    .run_if(|inputs: Res<ButtonInput<KeyCode>>| inputs.just_pressed(KeyCode::F7)),
+                inspector_ui.run_if(|debug_mode: Res<DebugEnabled>| debug_mode.0),
+                toggle_physics_debug
+                    .run_if(|inputs: Res<ButtonInput<KeyCode>>| inputs.just_pressed(KeyCode::F8)),
+            ),
+        );
     }
 }
 
 #[derive(Resource, Default)]
 pub struct DebugEnabled(pub bool);
 
-fn toggle_debug(
-    mut debug_mode: ResMut<DebugEnabled>,
-) {
+fn toggle_debug(mut debug_mode: ResMut<DebugEnabled>) {
     debug_mode.0 = !debug_mode.0;
 }
 
-fn inspector_ui(
-    world: &mut World,
-) {
-
+fn inspector_ui(world: &mut World) {
     let Ok(egui_context) = world
         .query_filtered::<&mut EguiContext, With<PrimaryWindow>>()
         .get_single(world)
@@ -66,8 +64,6 @@ fn inspector_ui(
     });
 }
 
-fn toggle_physics_debug(
-    mut debug_context: ResMut<DebugRenderContext>,
-) {
+fn toggle_physics_debug(mut debug_context: ResMut<DebugRenderContext>) {
     debug_context.enabled = !debug_context.enabled;
 }

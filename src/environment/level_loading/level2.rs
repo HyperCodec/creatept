@@ -1,7 +1,11 @@
 use bevy::prelude::*;
 use bevy_hanabi::prelude::*;
 
-use crate::{common_assets::CommonAssets, environment::spawn_cycle::{GoalBundle, SpawnpointBundle}, player::core::setup_player};
+use crate::{
+    common_assets::CommonAssets,
+    environment::spawn_cycle::{GoalBundle, SpawnpointBundle},
+    player::core::setup_player,
+};
 
 use super::LevelLoaded;
 

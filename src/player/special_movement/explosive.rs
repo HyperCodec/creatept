@@ -1,7 +1,7 @@
 use bevy::prelude::*;
-use bevy_rapier3d::prelude::*;
 use bevy_fps_controller::controller::LogicalPlayer;
 use bevy_hanabi::prelude::*;
+use bevy_rapier3d::prelude::*;
 
 use crate::environment::level_loading::LevelCleanup;
 
@@ -29,7 +29,10 @@ pub(super) fn handle_explosions(
     let player_transform = player_q.single();
 
     for (entity, explosion, transform) in explosions_q.iter() {
-        let distance = transform.translation.distance(player_transform.translation).max(1.);
+        let distance = transform
+            .translation
+            .distance(player_transform.translation)
+            .max(1.);
         if distance < explosion.radius {
             let strength = (1. - distance / explosion.radius) * explosion.force;
 
@@ -102,20 +105,20 @@ pub fn generate_explosion_particles(
         Spawner::burst(2500.0.into(), 2.0.into()),
         writer.finish(),
     )
-        .with_name("explosion")
-        .init(init_pos)
-        .init(init_vel)
-        .init(init_age)
-        .init(init_lifetime)
-        .update(update_drag)
-        .update(update_accel)
-        .render(ColorOverLifetimeModifier {
-            gradient: color_gradient1,
-        })
-        .render(SizeOverLifetimeModifier {
-            gradient: size_gradient1,
-            screen_space_size: false,
-        });
+    .with_name("explosion")
+    .init(init_pos)
+    .init(init_vel)
+    .init(init_age)
+    .init(init_lifetime)
+    .update(update_drag)
+    .update(update_accel)
+    .render(ColorOverLifetimeModifier {
+        gradient: color_gradient1,
+    })
+    .render(SizeOverLifetimeModifier {
+        gradient: size_gradient1,
+        screen_space_size: false,
+    });
 
     effects.add(effect)
 }

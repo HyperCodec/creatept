@@ -1,7 +1,7 @@
-mod test_level;
 mod level1;
 mod level2;
 mod level3;
+mod test_level;
 
 use bevy::prelude::*;
 use bevy_rapier3d::prelude::*;
@@ -11,26 +11,27 @@ use crate::GameState;
 pub struct LevelLoadingPlugin;
 
 impl Plugin for LevelLoadingPlugin {
-    fn build(&self, app: &mut App) { 
-        app
-            .add_event::<LevelLoadRequest>()
+    fn build(&self, app: &mut App) {
+        app.add_event::<LevelLoadRequest>()
             .add_event::<LevelLoaded>()
             .add_systems(Startup, init_levels)
-            .add_systems(Update, (
-                load_level,
-                change_playing_state
-                    .run_if(|events: EventReader<LevelLoaded>| !events.is_empty()),
-
+            .add_systems(
+                Update,
                 (
-                    test_level::load_test_level,
-                    level1::load_level_1,
-                    level2::load_level_2,
-                    level3::load_level_3,
-                )
-                    // could make all of this stuff into a chain statement but this allows me to put the bulky stuff last in the code
-                    .after(load_level)
-                    .before(change_playing_state),
-            ));
+                    load_level,
+                    change_playing_state
+                        .run_if(|events: EventReader<LevelLoaded>| !events.is_empty()),
+                    (
+                        test_level::load_test_level,
+                        level1::load_level_1,
+                        level2::load_level_2,
+                        level3::load_level_3,
+                    )
+                        // could make all of this stuff into a chain statement but this allows me to put the bulky stuff last in the code
+                        .after(load_level)
+                        .before(change_playing_state),
+                ),
+            );
     }
 }
 
@@ -92,10 +93,7 @@ fn load_level(
     }
 }
 
-pub fn init_levels(
-    asset_server: Res<AssetServer>,
-    mut commands: Commands,
-) {
+pub fn init_levels(asset_server: Res<AssetServer>, mut commands: Commands) {
     commands.insert_resource(LevelManager {
         current_level: 0,
         levels: vec![
@@ -119,16 +117,11 @@ pub fn init_levels(
     });
 }
 
-fn change_playing_state(
-    mut state: ResMut<GameState>,
-) {
+fn change_playing_state(mut state: ResMut<GameState>) {
     *state = GameState::Playing;
 }
 
-pub fn cleanup(
-    entities: &Query<Entity, With<LevelCleanup>>,
-    commands: &mut Commands,
-) {
+pub fn cleanup(entities: &Query<Entity, With<LevelCleanup>>, commands: &mut Commands) {
     for entity in entities.iter() {
         commands.entity(entity).despawn_recursive();
     }

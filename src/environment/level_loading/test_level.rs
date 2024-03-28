@@ -1,5 +1,8 @@
+use crate::{
+    common_assets::CommonAssets, environment::spawn_cycle::SpawnpointBundle,
+    player::core::setup_player,
+};
 use bevy::prelude::*;
-use crate::{common_assets::CommonAssets, environment::spawn_cycle::SpawnpointBundle, player::core::setup_player};
 
 use super::LevelLoaded;
 

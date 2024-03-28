@@ -1,29 +1,31 @@
 use bevy::prelude::*;
 use bevy_fps_controller::controller::LogicalPlayer;
-use bevy_rapier3d::prelude::*;
 use bevy_hanabi::prelude::*;
+use bevy_rapier3d::prelude::*;
 
 use crate::{environment::level_loading::cleanup, handle_empty_event, GameState};
 
-use super::{fx::{DespawnAfterTime, Sfx}, level_loading::LevelCleanup, EnvironmentTime};
+use super::{
+    fx::{DespawnAfterTime, Sfx},
+    level_loading::LevelCleanup,
+    EnvironmentTime,
+};
 
 pub struct SpawnCyclePlugin;
 
 impl Plugin for SpawnCyclePlugin {
     fn build(&self, app: &mut App) {
-        app
-            .add_event::<RespawnEvent>()
+        app.add_event::<RespawnEvent>()
             .add_event::<EndLevelEvent>()
-            .add_systems(Update, (
-                handle_empty_event!(end_level, EndLevelEvent),
-                handle_empty_event!(respawn, RespawnEvent),
-
+            .add_systems(
+                Update,
                 (
-                    handle_collision_goal.before(end_level),
-                    fall_off,
-                )
-                    .run_if(|state: Res<GameState>| state.is_playing()),
-            ));
+                    handle_empty_event!(end_level, EndLevelEvent),
+                    handle_empty_event!(respawn, RespawnEvent),
+                    (handle_collision_goal.before(end_level), fall_off)
+                        .run_if(|state: Res<GameState>| state.is_playing()),
+                ),
+            );
     }
 }
 
@@ -48,7 +50,7 @@ impl Default for SpawnpointBundle {
 }
 
 #[derive(Component, Default)]
-pub struct Goal { 
+pub struct Goal {
     pub size: f32,
 }
 
@@ -81,7 +83,11 @@ fn handle_collision_goal(
 ) {
     let player_transform = player_q.single();
     for (goal_transform, goal) in goal_q.iter() {
-        if player_transform.translation.distance_squared(goal_transform.translation) < goal.size.powi(2) {
+        if player_transform
+            .translation
+            .distance_squared(goal_transform.translation)
+            < goal.size.powi(2)
+        {
             ev.send(EndLevelEvent);
             *state = GameState::Menu;
         }
@@ -111,7 +117,10 @@ pub struct RespawnEvent;
 fn respawn(
     sfx: Res<Sfx>,
     spawn_q: Query<&Transform, (With<Spawnpoint>, Without<LogicalPlayer>)>,
-    mut player_q: Query<(Entity, &mut Transform, &mut Velocity), (With<LogicalPlayer>, Without<Spawnpoint>)>,
+    mut player_q: Query<
+        (Entity, &mut Transform, &mut Velocity),
+        (With<LogicalPlayer>, Without<Spawnpoint>),
+    >,
     mut commands: Commands,
 ) {
     let spawn = spawn_q.single();
@@ -133,10 +142,7 @@ fn respawn(
     });
 }
 
-fn fall_off(
-    player_q: Query<&Transform, With<LogicalPlayer>>,
-    mut ev: EventWriter<RespawnEvent>,
-) {
+fn fall_off(player_q: Query<&Transform, With<LogicalPlayer>>, mut ev: EventWriter<RespawnEvent>) {
     for player_transform in player_q.iter() {
         if player_transform.translation.y <= -50. {
             ev.send(RespawnEvent);
@@ -185,11 +191,7 @@ pub fn generate_goal_particles(
     // make particles not look weird
     let face_player = OrientModifier::new(OrientMode::FaceCameraPosition);
 
-    let effect = EffectAsset::new(
-        32768,
-        Spawner::rate(10000.0.into()),
-        writer.finish(),
-    )
+    let effect = EffectAsset::new(32768, Spawner::rate(10000.0.into()), writer.finish())
         .with_name("goal_particles")
         .init(init_pos)
         .init(init_vel)

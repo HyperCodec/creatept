@@ -1,9 +1,12 @@
 use bevy::{audio::Volume, prelude::*};
-use bevy_rapier3d::prelude::*;
 use bevy_fps_controller::controller::LogicalPlayer;
 use bevy_hanabi::prelude::*;
+use bevy_rapier3d::prelude::*;
 
-use crate::{environment::fx::{DespawnAfterTime, Sfx}, player::PlayerCamera};
+use crate::{
+    environment::fx::{DespawnAfterTime, Sfx},
+    player::PlayerCamera,
+};
 
 use super::{generate_explosion_particles, Explosion, ExplosionBundle};
 
@@ -44,7 +47,6 @@ pub(super) fn spawn_bomb(
             linvel: bomb_linvel,
             angvel: Vec3::ZERO,
         },
-
         // TODO stop it from rolling so much
         Friction {
             coefficient: 10.,
@@ -75,7 +77,8 @@ pub(super) fn tick_bombs(
                     radius: 15.,
                     force: 40.,
                 },
-                transform: Transform::from_translation(transform.translation - Vec3::Y * 0.5).into(),
+                transform: Transform::from_translation(transform.translation - Vec3::Y * 0.5)
+                    .into(),
                 ..default()
             });
 
@@ -90,7 +93,7 @@ pub(super) fn tick_bombs(
                     settings: PlaybackSettings {
                         volume: Volume::new(0.5),
                         ..default()
-                    }
+                    },
                 },
                 DespawnAfterTime {
                     timer: Timer::from_seconds(1., TimerMode::Once),
@@ -99,4 +102,3 @@ pub(super) fn tick_bombs(
         }
     }
 }
-
