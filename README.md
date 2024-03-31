@@ -12,9 +12,6 @@ My starting experience of Bevy (and gamedev in general) was very minimal (pretty
 
 And much more, all within the span of ~9 hours of development time (albeit drawn out to fit within 40min periods) to produce a playable/presentable game.
 
-### Demonstration (Used in my submission on collegeboard)
-![CreatePT Game Video](/doc-assets/demo-video.mov)
-
 ### Controls
 - Mouse Movement - Aim
 - WASD - Basic movement
